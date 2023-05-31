@@ -32,7 +32,8 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      const role = "ADMIN"  // 当前后台角色
+      login({ username: username.trim(), password: password, role: role }).then(response => {
         const { data } = response
         const token = data.access_token  // token
         commit('SET_TOKEN', token)
@@ -54,10 +55,10 @@ const actions = {
           return reject('验证失败，请重新登录')
         }
 
-        const { name, avatar } = data
+        const { name, avatarPath } = data
 
         commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+        commit('SET_AVATAR', avatarPath)
         resolve(data)
       }).catch(error => {
         reject(error)

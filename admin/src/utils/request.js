@@ -11,6 +11,7 @@ const service = axios.create({
 })
 
 // request interceptor
+axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 service.interceptors.request.use(
   config => {
     // do something before request is sent
@@ -53,19 +54,19 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
 
-      // 400: Token expired;
-      if (res.code === 400) {
-        // to re-login
-        MessageBox.confirm('登录已过期，您可以取消以留在此页面，也可以重新登录！', '确认注销', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        })
-      }
+      // 400: Token expired;  交给后端控制
+      // if (res.code === 400) {
+      //   // to re-login
+      //   MessageBox.confirm('登录已过期，您可以取消以留在此页面，也可以重新登录！', '确认注销', {
+      //     confirmButtonText: '重新登录',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     store.dispatch('user/resetToken').then(() => {
+      //       location.reload()
+      //     })
+      //   })
+      // }
       return Promise.reject(new Error(res.message || '系统错误，请联系管理员'))
     } else {
       return res
