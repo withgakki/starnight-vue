@@ -229,3 +229,36 @@ export function tansParams(params) {
 export function blobValidate(data) {
   return data.type !== 'application/json'
 }
+
+
+export function parseLevel(levelId) {
+  switch (levelId) {
+    case 1:
+      return '一年级';
+    case 2:
+      return '二年级';
+    case 3:
+      return '三年级';
+    case 4:
+      return '四年级';
+    case 5:
+      return '五年级';
+    case 6:
+      return '六年级';
+    case 7:
+      return '初一';
+    case 8:
+      return '初二';
+    case 9:
+      return '初三';
+    case 10:
+      return '高一';
+    case 11:
+      return '高二';
+    case 12:
+      return '高三';
+    default:
+      return '未知';
+  }
+
+}

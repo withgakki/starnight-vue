@@ -42,3 +42,10 @@ export function delUser(id) {
     method: 'delete'
   })
 }
+
+export function updateUserStatus(id) {
+  return request({
+    url: '/admin/user/status/' + id,
+    method: 'put',
+  })
+}

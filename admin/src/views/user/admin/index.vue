@@ -61,45 +61,38 @@
           @click="handleDelete"
         >删除</el-button>
       </el-col>
-      <!--
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出</el-button>
-      </el-col>
-      -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="自增id" align="center" prop="id" />
-      <el-table-column label="唯一uuid" align="center" prop="userUuid" />
+      <el-table-column label="Id" align="center" prop="id" />
       <el-table-column label="用户名" align="center" prop="userName" />
-      <el-table-column label="密码" align="center" prop="password" />
       <el-table-column label="真实姓名" align="center" prop="realName" />
-      <el-table-column label="年龄" align="center" prop="age" />
+      <el-table-column label="年级" align="center" prop="userLevel" >
+        <template slot-scope="scope">
+          <span>{{ parseLevel(scope.row.userLevel) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="性别" align="center" prop="sex" />
-      <el-table-column label="生日" align="center" prop="birthDay" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.birthDay, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="学生年级(1-12)" align="center" prop="userLevel" />
       <el-table-column label="手机号" align="center" prop="phone" />
-      <el-table-column label="角色" align="center" prop="role" />
-      <el-table-column label="状态" align="center" prop="status" />
-      <el-table-column label="头像地址" align="center" prop="avatarPath" />
-      <el-table-column label="最后一次上线时间" align="center" prop="lastActiveTime" width="180">
+      <el-table-column label="状态" align="center" prop="status" >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.lastActiveTime, '{y}-{m}-{d}') }}</span>
+          <el-switch
+            v-model="scope.row.status"
+            :active-value=1
+            :inactive-value=2
+            @change="handleStatus(scope.row)"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="微信openId" align="center" prop="wxOpenId" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -129,9 +122,6 @@
     <!-- 添加或修改用户对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="唯一uuid" prop="userUuid">
-          <el-input v-model="form.userUuid" placeholder="请输入唯一uuid" />
-        </el-form-item>
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="form.userName" placeholder="请输入用户名" />
         </el-form-item>
@@ -144,36 +134,22 @@
         <el-form-item label="年龄" prop="age">
           <el-input v-model="form.age" placeholder="请输入年龄" />
         </el-form-item>
-        <el-form-item label="生日" prop="birthDay">
+        <el-form-item label="性别" prop="sex">
+          <sex-selector :data.sync="form.sex"></sex-selector>
+        </el-form-item>
+        <el-form-item label="出生日期" prop="birthDay">
           <el-date-picker clearable
             v-model="form.birthDay"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择生日">
+            placeholder="请选择出生日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="学生年级(1-12)" prop="userLevel">
-          <el-input v-model="form.userLevel" placeholder="请输入学生年级(1-12)" />
+        <el-form-item label="年级" prop="userLevel">
+          <level-selector :data.sync="form.userLevel"></level-selector>
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone" placeholder="请输入手机号" />
-        </el-form-item>
-        <el-form-item label="角色" prop="role">
-          <el-input v-model="form.role" placeholder="请输入角色" />
-        </el-form-item>
-        <el-form-item label="头像地址" prop="avatarPath">
-          <el-input v-model="form.avatarPath" placeholder="请输入头像地址" />
-        </el-form-item>
-        <el-form-item label="最后一次上线时间" prop="lastActiveTime">
-          <el-date-picker clearable
-            v-model="form.lastActiveTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择最后一次上线时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="微信openId" prop="wxOpenId">
-          <el-input v-model="form.wxOpenId" placeholder="请输入微信openId" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -185,10 +161,13 @@
 </template>
 
 <script>
-  import {listUser, getUser, addUser, updateUser, delUser} from "@/api/user/admin/index";
+  import {listUser, getUser, addUser, updateUser, delUser, updateUserStatus} from "@/api/user/admin/index";
+  import LevelSelector from "@/components/LevelSelector";
+  import SexSelector from "@/components/SexSelector";
 
   export default {
   name: "User",
+  components: { LevelSelector, SexSelector },
   data() {
     return {
       // 遮罩层
@@ -216,6 +195,7 @@
         userName: null,
         realName: null,
         phone: null,
+        role: 3,  // 1 学生  2 教师  3 管理员
       },
       // 表单参数
       form: {},
@@ -258,7 +238,6 @@
         birthDay: null,
         userLevel: null,
         phone: null,
-        role: null,
         status: null,
         avatarPath: null,
         lastActiveTime: null,
@@ -309,6 +288,7 @@
               this.getList();
             });
           } else {
+            this.form.role = 3;  // 默认值
             addUser(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -328,12 +308,12 @@
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
-    /** 导出按钮操作 */
-    // handleExport() {
-    //   this.download('starnight/user/export', {
-    //     ...this.queryParams
-    //   }, `user_${new Date().getTime()}.xlsx`)
-    // }
+    /** 处理状态改变 */
+    handleStatus(row) {
+      updateUserStatus(row.id).then(response => {
+        this.$modal.msgSuccess("修改成功");
+      });
+    }
   }
 };
 </script>
