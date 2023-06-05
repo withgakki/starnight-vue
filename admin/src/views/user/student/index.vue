@@ -69,6 +69,11 @@
       <el-table-column label="Id" align="center" prop="id" />
       <el-table-column label="用户名" align="center" prop="userName" />
       <el-table-column label="真实姓名" align="center" prop="realName" />
+      <el-table-column label="年级" align="center" prop="userLevel" >
+        <template slot-scope="scope">
+          <span>{{ parseLevel(scope.row.userLevel) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="性别" align="center" prop="sex">
         <template slot-scope="scope">
           <span>{{ parseSex(scope.row.sex) }}</span>
@@ -194,7 +199,7 @@
         userName: null,
         realName: null,
         phone: null,
-        role: 3,  // 1 学生  2 教师  3 管理员
+        role: 1,  // 1 学生  2 教师  3 管理员
       },
       // 表单参数
       form: {},
@@ -287,7 +292,7 @@
               this.getList();
             });
           } else {
-            this.form.role = 3;  // 默认值
+            this.form.role = 1;  // 默认值
             addUser(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

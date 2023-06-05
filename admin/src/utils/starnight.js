@@ -260,5 +260,15 @@ export function parseLevel(levelId) {
     default:
       return '未知';
   }
+}
 
+export function parseSex(sexId) {
+  switch (sexId) {
+    case 1:
+      return '男';
+    case 2:
+      return '女';
+    default:
+      return '未知';
+  }
 }

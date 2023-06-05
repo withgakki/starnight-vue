@@ -91,11 +91,27 @@ export const constantRoutes = [
       {
         path: "student",
         name: "Student",
-        component: () => import("@/views/user/admin/index"),
+        component: () => import("@/views/user/student/index"),
         meta: { title: "学生列表", icon: "tree" },
       },
     ],
   },
+
+  // 学科管理页
+  {
+    path: "/subject",
+    component: Layout,
+    redirect: "/subject",
+    children: [
+      {
+        path: "subject",
+        name: "Subject",
+        component: () => import("@/views/subject/index"),
+        meta: { title: "学科管理", icon: "tree" },
+      },
+    ],
+  },
+
   // 404 page must be placed at the end !!!
   { path: "*", redirect: "/404", hidden: true },
 ];
