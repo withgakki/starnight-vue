@@ -1,3 +1,5 @@
+import store from '@/store'
+
 /**
  * 通用js方法封装处理
  * Copyright (c) 2019 ruoyi
@@ -271,4 +273,9 @@ export function parseSex(sexId) {
     default:
       return '未知';
   }
+}
+
+export function parseSubject(subjectId) {
+  const subject = store.getters.subjectById(subjectId);
+  return subject.name + '（' + subject.levelName + '）';
 }

@@ -1,21 +1,21 @@
 <template>
     <div class="app-container">
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-        <el-form-item label="学科名" prop="name">
+        <el-form-item label="题目ID" prop="infoTextContentId">
           <el-input
-            v-model="queryParams.name"
-            placeholder="请输入学科名"
+            v-model="queryParams.id"
             clearable
             @keyup.enter.native="handleQuery"
           />
         </el-form-item>
-        <el-form-item label="年级" prop="level">
-          <el-input
-            v-model="queryParams.level"
-            placeholder="请输入年级"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
+        <el-form-item label="学科" prop="subjectId">
+          <subject-selector :data.sync="queryParams.subjectId"></subject-selector>
+        </el-form-item>
+        <el-form-item label="年级" prop="gradeLevel">
+          <level-selector :data.sync="queryParams.gradeLevel"></level-selector>
+        </el-form-item>
+        <el-form-item label="题型" prop="questionType">
+          <question-type-selector :data.sync="queryParams.questionType"></question-type-selector>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -56,11 +56,23 @@
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
   
-      <el-table v-loading="loading" :data="subjectList" @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" :data="questionList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="Id" align="center" prop="id" />
-        <el-table-column label="学科" align="center" prop="name" />
-        <el-table-column label="年级" align="center" prop="levelName" />
+        <el-table-column label="学科" align="center" prop="subjectId">
+          <template slot-scope="scope">
+            <span>{{ parseSubject(scope.row.subjectId) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="题型" align="center" prop="questionType" />
+        <el-table-column label="分数" align="center" prop="score" />
+        <el-table-column label="难度" align="center" prop="difficult" />
+        <el-table-column label="题干" align="center" show-overflow-tooltip prop="shortTitle" />
+        <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button
@@ -87,14 +99,26 @@
         @pagination="getList"
       />
   
-      <!-- 添加或修改学科对话框 -->
+      <!-- 添加或修改题目对话框 -->
       <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
         <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-          <el-form-item label="学科名" prop="name">
-            <el-input v-model="form.name" placeholder="请输入学科名" />
+          <el-form-item label="学科" prop="subjectId">
+            <el-input v-model="form.subjectId" placeholder="请输入学科" />
           </el-form-item>
-          <el-form-item label="年级" prop="userLevel">
-            <level-selector :data.sync="form.level"></level-selector>
+          <el-form-item label="题目总分" prop="score">
+            <el-input v-model="form.score" placeholder="请输入题目总分" />
+          </el-form-item>
+          <el-form-item label="级别" prop="gradeLevel">
+            <el-input v-model="form.gradeLevel" placeholder="请输入级别" />
+          </el-form-item>
+          <el-form-item label="题目难度" prop="difficult">
+            <el-input v-model="form.difficult" placeholder="请输入题目难度" />
+          </el-form-item>
+          <el-form-item label="正确答案" prop="correct">
+            <el-input v-model="form.correct" type="textarea" placeholder="请输入内容" />
+          </el-form-item>
+          <el-form-item label="题目内容信息id" prop="infoTextContentId">
+            <el-input v-model="form.infoTextContentId" placeholder="请输入题目内容信息id" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -106,12 +130,15 @@
   </template>
   
   <script>
-    import {getSubject, listSubject, addSubject, updateSubject, delSubject} from "@/api/subject/index";
+    import {getQuestion, listQuestion} from "@/api/question/index";
     import LevelSelector from "@/components/LevelSelector";
+    import SubjectSelector from "@/components/SubjectSelector";
+    import QuestionTypeSelector from "@/components/QuestionTypeSelector";
+import { parseSubject } from "@/utils/starnight";
   
     export default {
-    name: "Subject",
-    components: { LevelSelector },
+    name: "Question",
+    components: {LevelSelector, SubjectSelector, QuestionTypeSelector},
     data() {
       return {
         // 遮罩层
@@ -126,8 +153,8 @@
         showSearch: true,
         // 总条数
         total: 0,
-        // 学科表格数据
-        subjectList: [],
+        // 题目表格数据
+        questionList: [],
         // 弹出层标题
         title: "",
         // 是否显示弹出层
@@ -136,10 +163,14 @@
         queryParams: {
           pageNum: 1,
           pageSize: 10,
-          name: null,
-          level: null,
-          levelName: null,
-          itemOrder: null
+          questionType: null,
+          subjectId: null,
+          score: null,
+          gradeLevel: null,
+          difficult: null,
+          correct: null,
+          infoTextContentId: null,
+          status: null
         },
         // 表单参数
         form: {},
@@ -152,11 +183,11 @@
       this.getList();
     },
     methods: {
-      /** 查询学科列表 */
+      /** 查询题目列表 */
       getList() {
         this.loading = true;
-        listSubject(this.queryParams).then(response => {
-          this.subjectList = response.rows;
+        listQuestion(this.queryParams).then(response => {
+          this.questionList = response.rows;
           this.total = response.total;
           this.loading = false;
         });
@@ -170,11 +201,17 @@
       reset() {
         this.form = {
           id: null,
+          createTime: null,
+          createBy: null,
           delFlag: null,
-          name: null,
-          level: null,
-          levelName: null,
-          itemOrder: null
+          questionType: null,
+          subjectId: null,
+          score: null,
+          gradeLevel: null,
+          difficult: null,
+          correct: null,
+          infoTextContentId: null,
+          status: null
         };
         this.resetForm("form");
       },
@@ -198,31 +235,30 @@
       handleAdd() {
         this.reset();
         this.open = true;
-        this.title = "添加学科";
+        this.title = "添加题目";
       },
       /** 修改按钮操作 */
       handleUpdate(row) {
         this.reset();
         const id = row.id || this.ids
-        getSubject(id).then(response => {
+        getQuestion(id).then(response => {
           this.form = response.data;
           this.open = true;
-          this.title = "修改学科";
+          this.title = "修改题目";
         });
       },
       /** 提交按钮 */
       submitForm() {
         this.$refs["form"].validate(valid => {
           if (valid) {
-            this.form.levelName = this.parseLevel(this.form.level)  // 携带年级名称
             if (this.form.id != null) {
-              updateSubject(this.form).then(response => {
+              updateQuestion(this.form).then(response => {
                 this.$modal.msgSuccess("修改成功");
                 this.open = false;
                 this.getList();
               });
             } else {
-              addSubject(this.form).then(response => {
+              addQuestion(this.form).then(response => {
                 this.$modal.msgSuccess("新增成功");
                 this.open = false;
                 this.getList();
@@ -234,8 +270,8 @@
       /** 删除按钮操作 */
       handleDelete(row) {
         const ids = row.id || this.ids;
-        this.$modal.confirm('是否确认删除学科编号为"' + ids + '"的数据项？').then(function() {
-          return delSubject(ids);
+        this.$modal.confirm('是否确认删除题目编号为"' + ids + '"的数据项？').then(function() {
+          return delQuestion(ids);
         }).then(() => {
           this.getList();
           this.$modal.msgSuccess("删除成功");

@@ -9,6 +9,14 @@ export function listSubject(query) {
   })
 }
 
+// 查询所有学科列表
+export function listAllSubject() {
+  return request({
+    url: '/admin/subject/list/all',
+    method: 'get'
+  })
+}
+
 // 查询学科详细
 export function getSubject(id) {
   return request({
