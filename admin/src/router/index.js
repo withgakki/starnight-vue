@@ -135,25 +135,25 @@ export const constantRoutes = [
       {
         path: "/question/edit/multipleChoice",
         name: "MultipleChoice",
-        component: () => import("@/views/user/student/index"),
+        component: () => import("@/views/question/edit/multiple-choice"),
         meta: { title: "多选题创编", icon: "tree" },
       },
       {
         path: "/question/edit/trueFalse",
         name: "TrueFalse",
-        component: () => import("@/views/user/student/index"),
+        component: () => import("@/views/question/edit/true-false"),
         meta: { title: "判断题创编", icon: "tree" },
       },
       {
         path: "/question/edit/gapFilling",
         name: "GapFilling",
-        component: () => import("@/views/user/student/index"),
+        component: () => import("@/views/question/edit/gap-filling"),
         meta: { title: "填空题创编", icon: "tree" },
       },
       {
         path: "/question/edit/shortAnswer",
         name: "ShortAnswer",
-        component: () => import("@/views/user/student/index"),
+        component: () => import("@/views/question/edit/short-answer"),
         meta: { title: "简答题创编", icon: "tree" },
       }
     ],

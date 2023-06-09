@@ -16,28 +16,8 @@
       <el-form-item label="题干：" prop="title" required>
         <el-input v-model="form.title" @focus="inputClick(form, 'title')" />
       </el-form-item>
-      <el-form-item label="选项：" required>
-        <el-form-item
-          :label="item.prefix"
-          :key="item.prefix"
-          v-for="(item, index) in form.items"
-          label-width="50px"
-          class="question-item-label"
-        >
-          <el-input v-model="item.prefix" style="width: 50px" />
-          <el-input
-            v-model="item.content"
-            @focus="inputClick(item, 'content')"
-            class="question-item-content-input"
-          />
-          <el-button
-            type="danger"
-            size="mini"
-            class="question-item-remove"
-            icon="el-icon-delete"
-            @click="questionItemRemove(index)"
-          ></el-button>
-        </el-form-item>
+      <el-form-item label="答案：" prop="correct" required>
+        <el-input v-model="form.correct" @focus="inputClick(form, 'correct')" />
       </el-form-item>
       <el-form-item label="解析：" prop="analyze" required>
         <el-input v-model="form.analyze" @focus="inputClick(form, 'analyze')" />
@@ -53,24 +33,12 @@
       <el-form-item label="难度：" required>
         <el-rate v-model="form.difficult" class="question-item-rate"></el-rate>
       </el-form-item>
-      <el-form-item label="正确答案：" prop="correct" required>
-        <el-radio-group v-model="form.correct">
-          <el-radio
-            v-for="item in form.items"
-            :key="item.prefix"
-            :label="item.prefix"
-            >{{ item.prefix }}</el-radio
-          >
-        </el-radio-group>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
-        <el-button type="success" @click="questionItemAdd">添加选项</el-button>
         <el-button type="success" @click="showQuestion">预览</el-button>
       </el-form-item>
     </el-form>
-
     <el-dialog
       :visible.sync="richEditor.dialogVisible"
       append-to-body
@@ -86,7 +54,6 @@
       </span>
     </el-dialog>
     <el-dialog
-      title="题目预览"
       :visible.sync="questionShow.dialog"
       style="width: 100%; height: 100%"
     >
@@ -117,21 +84,17 @@ export default {
     return {
       form: {
         id: null,
-        questionType: 1,
+        questionType: 5,
         gradeLevel: null,
         subjectId: null,
         title: "",
-        items: [
-          { prefix: "A", content: "" },
-          { prefix: "B", content: "" },
-          { prefix: "C", content: "" },
-          { prefix: "D", content: "" },
-        ],
+        items: [],
         analyze: "",
         correct: "",
         score: "",
         difficult: 0,
       },
+      subjectFilter: null,
       formLoading: false,
       rules: {
         gradeLevel: [
@@ -141,11 +104,9 @@ export default {
           { required: true, message: "请选择学科", trigger: "change" },
         ],
         title: [{ required: true, message: "请输入题干", trigger: "blur" }],
+        correct: [{ required: true, message: "请输入答案", trigger: "blur" }],
         analyze: [{ required: true, message: "请输入解析", trigger: "blur" }],
         score: [{ required: true, message: "请输入分数", trigger: "blur" }],
-        correct: [
-          { required: true, message: "请选择正确答案", trigger: "change" },
-        ],
       },
       richEditor: {
         dialogVisible: false,
@@ -190,20 +151,6 @@ export default {
       this.richEditor.object[this.richEditor.parameterName] = content;
       this.richEditor.dialogVisible = false;
     },
-    questionItemRemove(index) {
-      this.form.items.splice(index, 1);
-    },
-    questionItemAdd() {
-      let items = this.form.items;
-      let newLastPrefix;
-      if (items.length > 0) {
-        let last = items[items.length - 1];
-        newLastPrefix = String.fromCharCode(last.prefix.charCodeAt() + 1);
-      } else {
-        newLastPrefix = "A";
-      }
-      items.push({ id: null, prefix: newLastPrefix, content: "" });
-    },
     submitForm() {
       let _this = this;
       this.$refs.form.validate((valid) => {
@@ -238,16 +185,11 @@ export default {
       this.$refs["form"].resetFields();
       this.form = {
         id: null,
-        questionType: 1,
+        questionType: 5,
         gradeLevel: null,
         subjectId: null,
         title: "",
-        items: [
-          { prefix: "A", content: "" },
-          { prefix: "B", content: "" },
-          { prefix: "C", content: "" },
-          { prefix: "D", content: "" },
-        ],
+        items: [],
         analyze: "",
         correct: "",
         score: "",

@@ -53,15 +53,15 @@
       <el-form-item label="难度：" required>
         <el-rate v-model="form.difficult" class="question-item-rate"></el-rate>
       </el-form-item>
-      <el-form-item label="正确答案：" prop="correct" required>
-        <el-radio-group v-model="form.correct">
-          <el-radio
+      <el-form-item label="正确答案：" prop="correctArray" required>
+        <el-checkbox-group v-model="form.correctArray">
+          <el-checkbox
             v-for="item in form.items"
-            :key="item.prefix"
             :label="item.prefix"
-            >{{ item.prefix }}</el-radio
+            :key="item.prefix"
+            >{{ item.prefix }}</el-checkbox
           >
-        </el-radio-group>
+        </el-checkbox-group>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
@@ -70,7 +70,6 @@
         <el-button type="success" @click="showQuestion">预览</el-button>
       </el-form-item>
     </el-form>
-
     <el-dialog
       :visible.sync="richEditor.dialogVisible"
       append-to-body
@@ -117,21 +116,23 @@ export default {
     return {
       form: {
         id: null,
-        questionType: 1,
+        questionType: 2,
         gradeLevel: null,
         subjectId: null,
         title: "",
         items: [
-          { prefix: "A", content: "" },
-          { prefix: "B", content: "" },
-          { prefix: "C", content: "" },
-          { prefix: "D", content: "" },
+          { id: null, prefix: "A", content: "" },
+          { id: null, prefix: "B", content: "" },
+          { id: null, prefix: "C", content: "" },
+          { id: null, prefix: "D", content: "" },
         ],
         analyze: "",
         correct: "",
+        correctArray: [],
         score: "",
         difficult: 0,
       },
+      subjectFilter: null,
       formLoading: false,
       rules: {
         gradeLevel: [
@@ -143,7 +144,7 @@ export default {
         title: [{ required: true, message: "请输入题干", trigger: "blur" }],
         analyze: [{ required: true, message: "请输入解析", trigger: "blur" }],
         score: [{ required: true, message: "请输入分数", trigger: "blur" }],
-        correct: [
+        correctArray: [
           { required: true, message: "请选择正确答案", trigger: "change" },
         ],
       },
@@ -233,32 +234,33 @@ export default {
         }
       });
     },
+    showQuestion() {
+      this.questionShow.dialog = true;
+      this.questionShow.qType = this.form.questionType;
+      this.questionShow.question = this.form;
+    },
     resetForm() {
       let lastId = this.form.id;
       this.$refs["form"].resetFields();
       this.form = {
         id: null,
-        questionType: 1,
+        questionType: 2,
         gradeLevel: null,
         subjectId: null,
         title: "",
         items: [
-          { prefix: "A", content: "" },
-          { prefix: "B", content: "" },
-          { prefix: "C", content: "" },
-          { prefix: "D", content: "" },
+          { id: null, prefix: "A", content: "" },
+          { id: null, prefix: "B", content: "" },
+          { id: null, prefix: "C", content: "" },
+          { id: null, prefix: "D", content: "" },
         ],
         analyze: "",
         correct: "",
+        correctArray: [],
         score: "",
         difficult: 0,
       };
       this.form.id = lastId;
-    },
-    showQuestion() {
-      this.questionShow.dialog = true;
-      this.questionShow.qType = this.form.questionType;
-      this.questionShow.question = this.form;
     },
   },
 };

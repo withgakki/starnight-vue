@@ -34,7 +34,6 @@ export default {
       this.value = val;
     },
     value(val) {
-      console.log(val);
       this.$emit("update:data", val);
     }
   }

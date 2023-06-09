@@ -165,7 +165,7 @@
 </template>
   
   <script>
-import { listQuestion } from "@/api/question/index";
+import { listQuestion, delQuestion } from "@/api/question/index";
 import LevelSelector from "@/components/LevelSelector";
 import SubjectSelector from "@/components/SubjectSelector";
 import QuestionTypeSelector from "@/components/QuestionTypeSelector";

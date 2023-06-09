@@ -16,27 +16,27 @@
       <el-form-item label="题干：" prop="title" required>
         <el-input v-model="form.title" @focus="inputClick(form, 'title')" />
       </el-form-item>
-      <el-form-item label="选项：" required>
+      <el-form-item label="填空答案：" required>
         <el-form-item
           :label="item.prefix"
           :key="item.prefix"
-          v-for="(item, index) in form.items"
+          v-for="item in form.items"
           label-width="50px"
           class="question-item-label"
         >
-          <el-input v-model="item.prefix" style="width: 50px" />
           <el-input
             v-model="item.content"
             @focus="inputClick(item, 'content')"
             class="question-item-content-input"
+            style="width: 80%"
           />
-          <el-button
-            type="danger"
-            size="mini"
-            class="question-item-remove"
-            icon="el-icon-delete"
-            @click="questionItemRemove(index)"
-          ></el-button>
+          <span class="question-item-span">分数：</span
+          ><el-input-number
+            v-model="item.score"
+            :precision="1"
+            :step="1"
+            :max="100"
+          ></el-input-number>
         </el-form-item>
       </el-form-item>
       <el-form-item label="解析：" prop="analyze" required>
@@ -53,24 +53,12 @@
       <el-form-item label="难度：" required>
         <el-rate v-model="form.difficult" class="question-item-rate"></el-rate>
       </el-form-item>
-      <el-form-item label="正确答案：" prop="correct" required>
-        <el-radio-group v-model="form.correct">
-          <el-radio
-            v-for="item in form.items"
-            :key="item.prefix"
-            :label="item.prefix"
-            >{{ item.prefix }}</el-radio
-          >
-        </el-radio-group>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
-        <el-button type="success" @click="questionItemAdd">添加选项</el-button>
         <el-button type="success" @click="showQuestion">预览</el-button>
       </el-form-item>
     </el-form>
-
     <el-dialog
       :visible.sync="richEditor.dialogVisible"
       append-to-body
@@ -117,21 +105,17 @@ export default {
     return {
       form: {
         id: null,
-        questionType: 1,
+        questionType: 4,
         gradeLevel: null,
         subjectId: null,
         title: "",
-        items: [
-          { prefix: "A", content: "" },
-          { prefix: "B", content: "" },
-          { prefix: "C", content: "" },
-          { prefix: "D", content: "" },
-        ],
+        items: [],
         analyze: "",
         correct: "",
         score: "",
         difficult: 0,
       },
+      subjectFilter: null,
       formLoading: false,
       rules: {
         gradeLevel: [
@@ -143,9 +127,6 @@ export default {
         title: [{ required: true, message: "请输入题干", trigger: "blur" }],
         analyze: [{ required: true, message: "请输入解析", trigger: "blur" }],
         score: [{ required: true, message: "请输入分数", trigger: "blur" }],
-        correct: [
-          { required: true, message: "请选择正确答案", trigger: "change" },
-        ],
       },
       richEditor: {
         dialogVisible: false,
@@ -187,22 +168,54 @@ export default {
     },
     editorConfirm() {
       let content = this.richEditor.instance.getContent();
-      this.richEditor.object[this.richEditor.parameterName] = content;
-      this.richEditor.dialogVisible = false;
-    },
-    questionItemRemove(index) {
-      this.form.items.splice(index, 1);
-    },
-    questionItemAdd() {
-      let items = this.form.items;
-      let newLastPrefix;
-      if (items.length > 0) {
-        let last = items[items.length - 1];
-        newLastPrefix = String.fromCharCode(last.prefix.charCodeAt() + 1);
+      if (this.richEditor.parameterName === "title") {
+        // 题干的正确答案重置
+        if (this.questionItemReset(content)) {
+          this.richEditor.object[this.richEditor.parameterName] = content;
+          this.richEditor.dialogVisible = false;
+        } else {
+        }
       } else {
-        newLastPrefix = "A";
+        this.richEditor.object[this.richEditor.parameterName] = content;
+        this.richEditor.dialogVisible = false;
       }
-      items.push({ id: null, prefix: newLastPrefix, content: "" });
+    },
+    questionItemReset(content) {
+      let spanRegex = new RegExp(
+        '<span class="gapfilling-span (.*?)">(.*?)<\\/span>',
+        "g"
+      );
+      let _this = this;
+      let newFormItem = [];
+      let gapfillingItems = content.match(spanRegex);
+      if (gapfillingItems === null) {
+        this.$message.error("请插入填空");
+        return false;
+      }
+      gapfillingItems.forEach(function (span, index) {
+        let pairRegex = /<span class="gapfilling-span (.*?)">(.*?)<\/span>/;
+        pairRegex.test(span);
+        newFormItem.push({
+          id: null,
+          itemUuid: RegExp.$1,
+          prefix: RegExp.$2,
+          content: "",
+          score: "0",
+        });
+      });
+
+      newFormItem.forEach(function (item) {
+        _this.form.items.some((oldItem, index) => {
+          if (oldItem.itemUuid === item.itemUuid) {
+            item.content = oldItem.content;
+            item.id = oldItem.id;
+            item.score = oldItem.score;
+            return true;
+          }
+        });
+      });
+      _this.form.items = newFormItem;
+      return true;
     },
     submitForm() {
       let _this = this;
@@ -233,32 +246,27 @@ export default {
         }
       });
     },
+    showQuestion() {
+      this.questionShow.dialog = true;
+      this.questionShow.qType = this.form.questionType;
+      this.questionShow.question = this.form;
+    },
     resetForm() {
       let lastId = this.form.id;
       this.$refs["form"].resetFields();
       this.form = {
         id: null,
-        questionType: 1,
+        questionType: 4,
         gradeLevel: null,
         subjectId: null,
         title: "",
-        items: [
-          { prefix: "A", content: "" },
-          { prefix: "B", content: "" },
-          { prefix: "C", content: "" },
-          { prefix: "D", content: "" },
-        ],
+        items: [],
         analyze: "",
         correct: "",
         score: "",
         difficult: 0,
       };
       this.form.id = lastId;
-    },
-    showQuestion() {
-      this.questionShow.dialog = true;
-      this.questionShow.qType = this.form.questionType;
-      this.questionShow.question = this.form;
     },
   },
 };

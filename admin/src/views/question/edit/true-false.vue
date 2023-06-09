@@ -20,7 +20,7 @@
         <el-form-item
           :label="item.prefix"
           :key="item.prefix"
-          v-for="(item, index) in form.items"
+          v-for="item in form.items"
           label-width="50px"
           class="question-item-label"
         >
@@ -30,13 +30,6 @@
             @focus="inputClick(item, 'content')"
             class="question-item-content-input"
           />
-          <el-button
-            type="danger"
-            size="mini"
-            class="question-item-remove"
-            icon="el-icon-delete"
-            @click="questionItemRemove(index)"
-          ></el-button>
         </el-form-item>
       </el-form-item>
       <el-form-item label="解析：" prop="analyze" required>
@@ -66,11 +59,9 @@
       <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
-        <el-button type="success" @click="questionItemAdd">添加选项</el-button>
         <el-button type="success" @click="showQuestion">预览</el-button>
       </el-form-item>
     </el-form>
-
     <el-dialog
       :visible.sync="richEditor.dialogVisible"
       append-to-body
@@ -117,21 +108,20 @@ export default {
     return {
       form: {
         id: null,
-        questionType: 1,
+        questionType: 3,
         gradeLevel: null,
         subjectId: null,
         title: "",
         items: [
-          { prefix: "A", content: "" },
-          { prefix: "B", content: "" },
-          { prefix: "C", content: "" },
-          { prefix: "D", content: "" },
+          { id: null, prefix: "A", content: "是" },
+          { id: null, prefix: "B", content: "否" },
         ],
         analyze: "",
         correct: "",
         score: "",
         difficult: 0,
       },
+      subjectFilter: null,
       formLoading: false,
       rules: {
         gradeLevel: [
@@ -190,20 +180,6 @@ export default {
       this.richEditor.object[this.richEditor.parameterName] = content;
       this.richEditor.dialogVisible = false;
     },
-    questionItemRemove(index) {
-      this.form.items.splice(index, 1);
-    },
-    questionItemAdd() {
-      let items = this.form.items;
-      let newLastPrefix;
-      if (items.length > 0) {
-        let last = items[items.length - 1];
-        newLastPrefix = String.fromCharCode(last.prefix.charCodeAt() + 1);
-      } else {
-        newLastPrefix = "A";
-      }
-      items.push({ id: null, prefix: newLastPrefix, content: "" });
-    },
     submitForm() {
       let _this = this;
       this.$refs.form.validate((valid) => {
@@ -238,15 +214,13 @@ export default {
       this.$refs["form"].resetFields();
       this.form = {
         id: null,
-        questionType: 1,
+        questionType: 3,
         gradeLevel: null,
         subjectId: null,
         title: "",
         items: [
-          { prefix: "A", content: "" },
-          { prefix: "B", content: "" },
-          { prefix: "C", content: "" },
-          { prefix: "D", content: "" },
+          { id: null, prefix: "A", content: "是" },
+          { id: null, prefix: "B", content: "否" },
         ],
         analyze: "",
         correct: "",
