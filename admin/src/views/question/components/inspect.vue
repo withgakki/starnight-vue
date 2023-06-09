@@ -52,6 +52,7 @@
 import { getQuestion } from "@/api/question/index";
 
 export default {
+  name: "Inspect",
   props: {
     id: {
       type: Number,

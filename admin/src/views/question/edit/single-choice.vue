@@ -1,0 +1,254 @@
+<template>
+  <div class="app-container">
+    <el-form
+      :model="form"
+      ref="form"
+      label-width="100px"
+      v-loading="formLoading"
+      :rules="rules"
+    >
+      <el-form-item label="年级：" prop="gradeLevel" required>
+        <level-selector :data.sync="form.gradeLevel"></level-selector>
+      </el-form-item>
+      <el-form-item label="学科：" prop="subjectId" required>
+        <subject-selector :data.sync="form.subjectId"></subject-selector>
+      </el-form-item>
+      <el-form-item label="题干：" prop="title" required>
+        <el-input v-model="form.title" @focus="inputClick(form, 'title')" />
+      </el-form-item>
+      <el-form-item label="选项：" required>
+        <el-form-item
+          :label="item.prefix"
+          :key="item.prefix"
+          v-for="(item, index) in form.items"
+          label-width="50px"
+          class="question-item-label"
+        >
+          <el-input v-model="item.prefix" style="width: 50px" />
+          <el-input
+            v-model="item.content"
+            @focus="inputClick(item, 'content')"
+            class="question-item-content-input"
+          />
+          <el-button
+            type="danger"
+            size="mini"
+            class="question-item-remove"
+            icon="el-icon-delete"
+            @click="questionItemRemove(index)"
+          ></el-button>
+        </el-form-item>
+      </el-form-item>
+      <el-form-item label="解析：" prop="analyze" required>
+        <el-input v-model="form.analyze" @focus="inputClick(form, 'analyze')" />
+      </el-form-item>
+      <el-form-item label="分数：" prop="score" required>
+        <el-input-number
+          v-model="form.score"
+          :precision="1"
+          :step="1"
+          :max="100"
+        ></el-input-number>
+      </el-form-item>
+      <el-form-item label="难度：" required>
+        <el-rate v-model="form.difficult" class="question-item-rate"></el-rate>
+      </el-form-item>
+      <el-form-item label="正确答案：" prop="correct" required>
+        <el-radio-group v-model="form.correct">
+          <el-radio
+            v-for="item in form.items"
+            :key="item.prefix"
+            :label="item.prefix"
+            >{{ item.prefix }}</el-radio
+          >
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button @click="resetForm">重置</el-button>
+        <el-button type="success" @click="questionItemAdd">添加选项</el-button>
+        <el-button type="success" @click="showQuestion">预览</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-dialog
+      :visible.sync="richEditor.dialogVisible"
+      append-to-body
+      :close-on-click-modal="false"
+      style="width: 100%; height: 100%"
+      :show-close="false"
+      center
+    >
+      <Ueditor @ready="editorReady" />
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editorConfirm">确 定</el-button>
+        <el-button @click="richEditor.dialogVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="题目预览"
+      :visible.sync="questionShow.dialog"
+      style="width: 100%; height: 100%"
+    >
+      <Preview
+        :qType="questionShow.qType"
+        :question="questionShow.question"
+        :qLoading="questionShow.loading"
+      />
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import Preview from "../components/Preview";
+import Ueditor from "@/components/Ueditor";
+import LevelSelector from "@/components/LevelSelector";
+import SubjectSelector from "@/components/SubjectSelector";
+import { getQuestion, addQuestion } from "@/api/question";
+
+export default {
+  components: {
+    Ueditor,
+    Preview,
+    LevelSelector,
+    SubjectSelector,
+  },
+  data() {
+    return {
+      form: {
+        id: null,
+        questionType: 1,
+        gradeLevel: null,
+        subjectId: null,
+        title: "",
+        items: [
+          { prefix: "A", content: "" },
+          { prefix: "B", content: "" },
+          { prefix: "C", content: "" },
+          { prefix: "D", content: "" },
+        ],
+        analyze: "",
+        correct: "",
+        score: "",
+        difficult: 0,
+      },
+      formLoading: false,
+      rules: {
+        gradeLevel: [
+          { required: true, message: "请选择年级", trigger: "change" },
+        ],
+        subjectId: [
+          { required: true, message: "请选择学科", trigger: "change" },
+        ],
+        title: [{ required: true, message: "请输入题干", trigger: "blur" }],
+        analyze: [{ required: true, message: "请输入解析", trigger: "blur" }],
+        score: [{ required: true, message: "请输入分数", trigger: "blur" }],
+        correct: [
+          { required: true, message: "请选择正确答案", trigger: "change" },
+        ],
+      },
+      richEditor: {
+        dialogVisible: false,
+        object: null,
+        parameterName: "",
+        instance: null,
+      },
+      questionShow: {
+        qType: 0,
+        dialog: false,
+        question: null,
+        loading: false,
+      },
+    };
+  },
+  created() {
+    let id = this.$route.query.id;
+    let _this = this;
+    if (id && parseInt(id) !== 0) {
+      _this.formLoading = true;
+      getQuestion(id).then((res) => {
+        _this.form = res.data;
+        _this.formLoading = false;
+      });
+    }
+  },
+  methods: {
+    editorReady(instance) {
+      this.richEditor.instance = instance;
+      let currentContent =
+        this.richEditor.object[this.richEditor.parameterName];
+      this.richEditor.instance.setContent(currentContent);
+      this.richEditor.instance.focus(true);
+    },
+    inputClick(object, parameterName) {
+      this.richEditor.object = object;
+      this.richEditor.parameterName = parameterName;
+      this.richEditor.dialogVisible = true;
+    },
+    editorConfirm() {
+      let content = this.richEditor.instance.getContent();
+      this.richEditor.object[this.richEditor.parameterName] = content;
+      this.richEditor.dialogVisible = false;
+    },
+    questionItemRemove(index) {
+      this.form.items.splice(index, 1);
+    },
+    questionItemAdd() {
+      let items = this.form.items;
+      let newLastPrefix;
+      if (items.length > 0) {
+        let last = items[items.length - 1];
+        newLastPrefix = String.fromCharCode(last.prefix.charCodeAt() + 1);
+      } else {
+        newLastPrefix = "A";
+      }
+      items.push({ id: null, prefix: newLastPrefix, content: "" });
+    },
+    submitForm() {
+      let _this = this;
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.formLoading = true;
+          addQuestion(this.form)
+            .then((re) => {
+              _this.$modal.msgSuccess("新增成功");
+              _this.$tab.closeOpenPage("/question/list");
+            })
+            .catch((e) => {
+              this.formLoading = false;
+            });
+        } else {
+          return false;
+        }
+      });
+    },
+    resetForm() {
+      let lastId = this.form.id;
+      this.$refs["form"].resetFields();
+      this.form = {
+        id: null,
+        questionType: 1,
+        gradeLevel: null,
+        subjectId: null,
+        title: "",
+        items: [
+          { prefix: "A", content: "" },
+          { prefix: "B", content: "" },
+          { prefix: "C", content: "" },
+          { prefix: "D", content: "" },
+        ],
+        analyze: "",
+        correct: "",
+        score: "",
+        difficult: 0,
+      };
+      this.form.id = lastId;
+    },
+    showQuestion() {
+      this.questionShow.dialog = true;
+      this.questionShow.qType = this.form.questionType;
+      this.questionShow.question = this.form;
+    },
+  },
+};
+</script>

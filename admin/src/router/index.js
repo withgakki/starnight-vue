@@ -129,7 +129,7 @@ export const constantRoutes = [
       {
         path: "/question/edit/singleChoice",
         name: "SingleChoice",
-        component: () => import("@/views/user/student/index"),
+        component: () => import("@/views/question/edit/single-choice"),
         meta: { title: "单选题创编", icon: "tree" },
       },
       {
