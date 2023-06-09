@@ -17,7 +17,7 @@ import plugins from './plugins' // plugins
 import '@/icons' // icon
 import '@/permission' // permission control
 
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, parseLevel, parseSex, parseSubject } from "@/utils/starnight"
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, parseLevel, parseSex, parseSubject, parseQuestionType, parseEditUrl } from "@/utils/starnight"
 
 // 分页组件
 import Pagination from "@/components/Pagination"
@@ -38,6 +38,8 @@ Vue.prototype.handleTree = handleTree
 Vue.prototype.parseLevel = parseLevel
 Vue.prototype.parseSex = parseSex
 Vue.prototype.parseSubject = parseSubject
+Vue.prototype.parseQuestionType = parseQuestionType
+Vue.prototype.parseEditUrl = parseEditUrl
 
 Vue.use(plugins)
 

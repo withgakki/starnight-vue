@@ -183,3 +183,130 @@ aside {
     margin-bottom: 10px;
   }
 }
+
+
+
+//refine vue-multiselect plugin
+.multiselect {
+  line-height: 16px;
+}
+
+.multiselect--active {
+  z-index: 1000 !important;
+}
+
+.link-left {
+  margin-left: 5px;
+}
+
+.question-item-label {
+  margin-top: 10px;
+  margin-bottom: 10px !important;
+}
+
+.question-item-remove {
+  margin-left: 20px;
+}
+
+.question-item-content-input {
+  margin-left: 8px;
+  width: 60%;
+}
+
+.question-item-span {
+  vertical-align: middle;
+  font-size: 14px;
+  color: #606266;
+  font-weight: 700;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-left: 10px;
+}
+
+.question-item-rate {
+  line-height: 2.5;
+}
+
+.q-title {
+  margin: 0px 5px;
+
+  p {
+    display: inline !important;
+  }
+}
+
+
+.q-content {
+  p {
+    display: inline !important;
+  }
+}
+
+.q-item-prefix {
+  margin: 5px 10px;
+}
+
+.q-item-contain {
+  display: inline-block;
+}
+
+.q-item-content {
+  margin: 5px;
+  white-space: normal;
+
+  p {
+    display: inline !important;
+  }
+}
+
+.gapfilling-span {
+  color: red;
+  padding: 0px 30px;
+  margin: 0px 5px;
+  border-bottom: 3px double red;
+}
+
+.exampaper-item-box {
+  margin-top: 20px;
+}
+
+.exampaper-item {
+  margin: 5px 0px;
+}
+
+.ueditor-p {
+  display: inline !important;
+}
+
+
+.foot-copyright {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+
+  span {
+    line-height: 20px;
+    text-align: center;
+    color: #606266;
+    margin: 0px 5px;
+    font-size: 14px;
+  }
+}
+
+.account-foot-copyright {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+
+  span {
+    line-height: 20px;
+    text-align: center;
+    color: rgb(179, 185, 192);
+    margin: 0px 5px;
+    font-size: 14px;
+  }
+}

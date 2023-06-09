@@ -83,13 +83,13 @@ export const constantRoutes = [
     meta: { title: "用户管理", icon: "el-icon-s-help" },
     children: [
       {
-        path: "/admin",
+        path: "/user/admin",
         name: "Admin",
         component: () => import("@/views/user/admin/index"),
         meta: { title: "管理员列表", icon: "table" },
       },
       {
-        path: "/student",
+        path: "/user/student",
         name: "Student",
         component: () => import("@/views/user/student/index"),
         meta: { title: "学生列表", icon: "tree" },
@@ -101,10 +101,10 @@ export const constantRoutes = [
   {
     path: "/subject",
     component: Layout,
-    redirect: "/subject",
+    redirect: "/subject/list",
     children: [
       {
-        path: "/subject",
+        path: "/subject/list",
         name: "Subject",
         component: () => import("@/views/subject/index"),
         meta: { title: "学科管理", icon: "tree" },
@@ -121,37 +121,37 @@ export const constantRoutes = [
     meta: { title: "题库管理", icon: "el-icon-s-help" },
     children: [
       {
-        path: "/list",
+        path: "/question/list",
         name: "List",
         component: () => import("@/views/question/index"),
         meta: { title: "题目列表", icon: "table" },
       },
       {
-        path: "/edit/singleChoice",
+        path: "/question/edit/singleChoice",
         name: "SingleChoice",
         component: () => import("@/views/user/student/index"),
         meta: { title: "单选题创编", icon: "tree" },
       },
       {
-        path: "/edit/multipleChoice",
+        path: "/question/edit/multipleChoice",
         name: "MultipleChoice",
         component: () => import("@/views/user/student/index"),
         meta: { title: "多选题创编", icon: "tree" },
       },
       {
-        path: "/edit/trueFalse",
+        path: "/question/edit/trueFalse",
         name: "TrueFalse",
         component: () => import("@/views/user/student/index"),
         meta: { title: "判断题创编", icon: "tree" },
       },
       {
-        path: "/edit/gapFilling",
+        path: "/question/edit/gapFilling",
         name: "GapFilling",
         component: () => import("@/views/user/student/index"),
         meta: { title: "填空题创编", icon: "tree" },
       },
       {
-        path: "/edit/shortAnswer",
+        path: "/question/edit/shortAnswer",
         name: "ShortAnswer",
         component: () => import("@/views/user/student/index"),
         meta: { title: "简答题创编", icon: "tree" },

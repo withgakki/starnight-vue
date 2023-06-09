@@ -33,7 +33,7 @@
             @click="handleAdd"
           >新增</el-button>
         </el-col>
-        <el-col :span="1.5">
+        <!-- <el-col :span="1.5">
           <el-button
             type="success"
             plain
@@ -42,7 +42,7 @@
             :disabled="single"
             @click="handleUpdate"
           >修改</el-button>
-        </el-col>
+        </el-col> -->
         <el-col :span="1.5">
           <el-button
             type="danger"
@@ -64,7 +64,11 @@
             <span>{{ parseSubject(scope.row.subjectId) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="题型" align="center" prop="questionType" />
+        <el-table-column label="题型" align="center" prop="questionType">
+          <template slot-scope="scope">
+            <span>{{ parseQuestionType(scope.row.questionType) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="分数" align="center" prop="score" />
         <el-table-column label="难度" align="center" prop="difficult" />
         <el-table-column label="题干" align="center" show-overflow-tooltip prop="shortTitle" />
@@ -75,6 +79,12 @@
         </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleInspect(scope.row)"
+            >预览</el-button>
             <el-button
               size="mini"
               type="text"
@@ -99,46 +109,23 @@
         @pagination="getList"
       />
   
-      <!-- 添加或修改题目对话框 -->
-      <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-        <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-          <el-form-item label="学科" prop="subjectId">
-            <el-input v-model="form.subjectId" placeholder="请输入学科" />
-          </el-form-item>
-          <el-form-item label="题目总分" prop="score">
-            <el-input v-model="form.score" placeholder="请输入题目总分" />
-          </el-form-item>
-          <el-form-item label="级别" prop="gradeLevel">
-            <el-input v-model="form.gradeLevel" placeholder="请输入级别" />
-          </el-form-item>
-          <el-form-item label="题目难度" prop="difficult">
-            <el-input v-model="form.difficult" placeholder="请输入题目难度" />
-          </el-form-item>
-          <el-form-item label="正确答案" prop="correct">
-            <el-input v-model="form.correct" type="textarea" placeholder="请输入内容" />
-          </el-form-item>
-          <el-form-item label="题目内容信息id" prop="infoTextContentId">
-            <el-input v-model="form.infoTextContentId" placeholder="请输入题目内容信息id" />
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
-        </div>
+      <!-- 题目预览对话框 -->
+      <el-dialog title="题目预览" :visible.sync="inspectOpen" width="500px" append-to-body>
+        <inspect :id="inspectId"></inspect>
       </el-dialog>
     </div>
   </template>
   
   <script>
-    import {getQuestion, listQuestion} from "@/api/question/index";
+    import {listQuestion} from "@/api/question/index";
     import LevelSelector from "@/components/LevelSelector";
     import SubjectSelector from "@/components/SubjectSelector";
     import QuestionTypeSelector from "@/components/QuestionTypeSelector";
-import { parseSubject } from "@/utils/starnight";
+    import inspect from "./components/inspect.vue";
   
     export default {
     name: "Question",
-    components: {LevelSelector, SubjectSelector, QuestionTypeSelector},
+    components: {LevelSelector, SubjectSelector, QuestionTypeSelector, inspect},
     data() {
       return {
         // 遮罩层
@@ -155,10 +142,10 @@ import { parseSubject } from "@/utils/starnight";
         total: 0,
         // 题目表格数据
         questionList: [],
-        // 弹出层标题
-        title: "",
-        // 是否显示弹出层
-        open: false,
+        // 预览弹出层数据
+        inspectId: null,
+        // 预览弹出层
+        inspectOpen: false,
         // 查询参数
         queryParams: {
           pageNum: 1,
@@ -192,29 +179,6 @@ import { parseSubject } from "@/utils/starnight";
           this.loading = false;
         });
       },
-      // 取消按钮
-      cancel() {
-        this.open = false;
-        this.reset();
-      },
-      // 表单重置
-      reset() {
-        this.form = {
-          id: null,
-          createTime: null,
-          createBy: null,
-          delFlag: null,
-          questionType: null,
-          subjectId: null,
-          score: null,
-          gradeLevel: null,
-          difficult: null,
-          correct: null,
-          infoTextContentId: null,
-          status: null
-        };
-        this.resetForm("form");
-      },
       /** 搜索按钮操作 */
       handleQuery() {
         this.queryParams.pageNum = 1;
@@ -233,39 +197,17 @@ import { parseSubject } from "@/utils/starnight";
       },
       /** 新增按钮操作 */
       handleAdd() {
-        this.reset();
-        this.open = true;
-        this.title = "添加题目";
+        this.$router.push('/question/edit/singleChoice')  // 默认添加单选题
       },
       /** 修改按钮操作 */
       handleUpdate(row) {
-        this.reset();
-        const id = row.id || this.ids
-        getQuestion(id).then(response => {
-          this.form = response.data;
-          this.open = true;
-          this.title = "修改题目";
-        });
+        let url = this.parseEditUrl(row.questionType)
+        this.$router.push({ path: url, query: { id: row.id } })
       },
-      /** 提交按钮 */
-      submitForm() {
-        this.$refs["form"].validate(valid => {
-          if (valid) {
-            if (this.form.id != null) {
-              updateQuestion(this.form).then(response => {
-                this.$modal.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
-              });
-            } else {
-              addQuestion(this.form).then(response => {
-                this.$modal.msgSuccess("新增成功");
-                this.open = false;
-                this.getList();
-              });
-            }
-          }
-        });
+      /** 预览按钮操作 */
+      handleInspect(row) {
+        this.inspectId = row.id;
+        this.inspectOpen = true;
       },
       /** 删除按钮操作 */
       handleDelete(row) {
