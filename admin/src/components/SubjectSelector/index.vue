@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { listSubjectByLevel } from "@/api/subject";
 
 export default {
   name: "SubjectSelector",
@@ -12,6 +13,14 @@ export default {
     data: {
       default: null,
       type: Number
+    },
+    level: {
+      default: null,
+      type: Number
+    },
+    initAll: {
+      default: false,
+      type: Boolean
     }
   },
   data() {
@@ -27,12 +36,22 @@ export default {
     value(val) {
       console.log(val);
       this.$emit("update:data", val);
+    },
+    level(val) {
+      this.getList();
     }
   },
   created() {
-    this.$store.dispatch('subject/getSubjectList').then((data) => {
-      this.list = data
-    })
+    if (this.initAll) {
+      this.getList();
+    }
+  },
+  methods: {
+    getList() {
+      listSubjectByLevel(this.level).then(res => {
+        this.list = res.data;
+      })
+    }
   }
 };
 </script>

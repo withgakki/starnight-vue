@@ -11,7 +11,7 @@
         <level-selector :data.sync="form.gradeLevel"></level-selector>
       </el-form-item>
       <el-form-item label="学科：" prop="subjectId" required>
-        <subject-selector :data.sync="form.subjectId"></subject-selector>
+        <subject-selector :data.sync="form.subjectId" :level="form.gradeLevel"></subject-selector>
       </el-form-item>
       <el-form-item label="题干：" prop="title" required>
         <el-input v-model="form.title" @focus="inputClick(form, 'title')" />

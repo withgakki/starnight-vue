@@ -10,10 +10,11 @@ export function listSubject(query) {
 }
 
 // 查询所有学科列表
-export function listAllSubject() {
+export function listSubjectByLevel(level) {
   return request({
     url: '/admin/subject/list/all',
-    method: 'get'
+    method: 'get',
+    params: { level }
   })
 }
 

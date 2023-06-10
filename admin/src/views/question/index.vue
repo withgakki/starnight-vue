@@ -15,11 +15,11 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学科" prop="subjectId">
-        <subject-selector :data.sync="queryParams.subjectId"></subject-selector>
-      </el-form-item>
       <el-form-item label="年级" prop="gradeLevel">
         <level-selector :data.sync="queryParams.gradeLevel"></level-selector>
+      </el-form-item>
+      <el-form-item label="学科" prop="subjectId">
+        <subject-selector :data.sync="queryParams.subjectId" :level="queryParams.gradeLevel"></subject-selector>
       </el-form-item>
       <el-form-item label="题型" prop="questionType">
         <question-type-selector
@@ -200,6 +200,7 @@ export default {
     };
   },
   created() {
+    this.$store.dispatch('subject/getSubjectList');
     this.getList();
   },
   methods: {

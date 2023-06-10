@@ -11,7 +11,7 @@
         <level-selector :data.sync="form.gradeLevel"></level-selector>
       </el-form-item>
       <el-form-item label="学科：" prop="subjectId" required>
-        <subject-selector :data.sync="form.subjectId"></subject-selector>
+        <subject-selector :data.sync="form.subjectId" :level="form.gradeLevel"></subject-selector>
       </el-form-item>
       <el-form-item label="试卷类型：" prop="paperType" required>
         <exampaper-type-selector
@@ -84,7 +84,7 @@
           </el-form-item>
         </el-card>
       </el-form-item>
-      <el-form-item label="建议时长" prop="suggestTime" required>
+      <el-form-item label="建议时长：" prop="suggestTime" required>
         <el-tooltip
           effect="dark"
           content="单位：分钟"

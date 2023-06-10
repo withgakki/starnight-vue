@@ -10,12 +10,7 @@
           />
         </el-form-item>
         <el-form-item label="年级" prop="level">
-          <el-input
-            v-model="queryParams.level"
-            placeholder="请输入年级"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
+          <level-selector :data.sync="queryParams.level"></level-selector>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>

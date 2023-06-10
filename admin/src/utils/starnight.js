@@ -319,6 +319,10 @@ export function parseEditUrl(editUrlId) {
   return formatDict(questionTypeEnum, editUrlId).value;
 }
 
+/**
+ * 该方法引用 vuex subject module
+ * 请注意在使用该方法前, 使用 this.$store.dispatch('subject/getSubjectList'); 初始化 store
+ */
 export function parseSubject(subjectId) {
   const subject = store.getters.subjectById(subjectId);
   if (subject === undefined || subject === null) {

@@ -1,4 +1,4 @@
-import { listAllSubject } from "@/api/subject/index";
+import { listSubjectByLevel } from "@/api/subject/index";
 
 const state = {
   subjectList: [],
@@ -13,7 +13,7 @@ const mutations = {
 const actions = {
   getSubjectList({ commit }) {
     return new Promise((resolve, reject) => {
-      listAllSubject()
+      listSubjectByLevel()
         .then((response) => {
           const { data } = response;
           commit("SET_SUBJECT_LIST", data);
@@ -23,7 +23,7 @@ const actions = {
           reject(error);
         });
     });
-  },
+  }
 };
 
 export default {
@@ -32,4 +32,3 @@ export default {
   mutations,
   actions,
 }
-
