@@ -51,16 +51,6 @@
           >新增</el-button
         >
       </el-col>
-      <!-- <el-col :span="1.5">
-          <el-button
-            type="success"
-            plain
-            icon="el-icon-edit"
-            size="mini"
-            :disabled="single"
-            @click="handleUpdate"
-          >修改</el-button>
-        </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -206,11 +196,7 @@ export default {
         correct: null,
         infoTextContentId: null,
         status: null,
-      },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {},
+      }
     };
   },
   created() {
@@ -269,8 +255,8 @@ export default {
           this.$modal.msgSuccess("删除成功");
         })
         .catch(() => {});
-    },
-  },
+    }
+  }
 };
 </script>
   

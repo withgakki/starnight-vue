@@ -112,7 +112,30 @@ export const constantRoutes = [
     ],
   },
 
-  // 题库管理
+   // 试卷管理页
+  {
+    path: "/exampaper",
+    component: Layout,
+    redirect: "/exampaper/list",
+    name: "Exampaper",
+    meta: { title: "试卷管理", icon: "el-icon-s-help" },
+    children: [
+      {
+        path: "/exampaper/list",
+        name: "List",
+        component: () => import("@/views/exampaper/index"),
+        meta: { title: "试卷列表", icon: "table" },
+      },
+      {
+        path: "/exampaper/edit",
+        name: "ExampaperEdit",
+        component: () => import("@/views/exampaper/edit/index"),
+        meta: { title: "试卷创编", icon: "tree" },
+      }
+    ],
+  },
+
+  // 题库管理页
   {
     path: "/question",
     component: Layout,
