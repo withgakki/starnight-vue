@@ -9,6 +9,14 @@ export function listExampaper(query) {
   })
 }
 
+export function listByTaskExamPaper(query) {
+  return request({
+    url: '/admin/exampaper/list/taskexampaper',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询试卷详细
 export function getExampaper(id) {
   return request({

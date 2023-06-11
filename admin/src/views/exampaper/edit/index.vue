@@ -105,7 +105,7 @@
     </el-form>
 
     <el-dialog :visible.sync="questionPage.open" width="70%">
-      <el-form :model="questionPage.queryParam" ref="queryForm" inline>
+      <el-form :model="questionPage.queryParams" ref="queryForm" inline>
         <el-form-item label="ID">
           <el-input
             placeholder="题目ID"

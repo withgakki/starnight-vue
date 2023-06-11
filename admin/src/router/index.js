@@ -182,6 +182,29 @@ export const constantRoutes = [
     ],
   },
 
+  // 任务管理页
+  {
+    path: "/taskexam",
+    component: Layout,
+    redirect: "/taskexam/list",
+    name: "Taskexam",
+    meta: { title: "任务管理", icon: "el-icon-s-help" },
+    children: [
+      {
+        path: "/taskexam/list",
+        name: "List",
+        component: () => import("@/views/taskexam/index"),
+        meta: { title: "任务列表", icon: "table" },
+      },
+      {
+        path: "/taskexam/edit",
+        name: "TaskexamEdit",
+        component: () => import("@/views/taskexam/edit/index"),
+        meta: { title: "任务创编", icon: "tree" },
+      }
+    ],
+  },
+
   // 404 page must be placed at the end !!!
   { path: "*", redirect: "/404", hidden: true },
 ];
