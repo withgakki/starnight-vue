@@ -3,37 +3,39 @@
     <Navbar :hideBtn="false" bgColor="#f3f4f6"></Navbar>
     <view style="background-color: #2b85e4; padding: 40rpx;">
       <view style="width: 140rpx; height: 140rpx; border: 1px solid #fff; border-radius: 50%; margin: 0 auto;">
-        <u-avatar src="/static/img/avatar.png" size="120rpx" style="margin: 10rpx;"></u-avatar>
+        <u-upload :maxCount="1" @afterRead="uploadAvatar">
+          <u-avatar :src="userInfo.avatarPath" size="120rpx" style="margin: 10rpx;"></u-avatar>
+        </u-upload>
       </view>
     </view>
     <view style="padding: 40rpx;">
       <u--form :model="userInfo" ref="uForm" labelWidth="160rpx" labelAlign="left">
-        <u-form-item label="姓名" prop="nickName" class="u-border-bottom">
+        <u-form-item label="真实姓名" prop="nickName" class="u-border-bottom">
           <u--input
             placeholder="请输入内容"
             border="none"
-            v-model="userInfo.nickName"
+            v-model="userInfo.realName"
           ></u--input>
-        </u-form-item>
-        <u-form-item label="性别" prop="sex" class="u-border-bottom">
-          <u-radio-group v-model="userInfo.sex" size="36rpx">
-            <u-radio shape="circle" label="男" name="1" labelSize="32rpx"></u-radio>
-            <u-radio shape="circle" label="女" name="2" labelSize="32rpx" style="margin-left: 36rpx;"></u-radio>
-          </u-radio-group>
         </u-form-item>
         <u-form-item label="手机号码" prop="phonenumber" class="u-border-bottom">
           <u--input
             placeholder="请输入内容"
             border="none"
-            v-model="userInfo.phonenumber"
+            v-model="userInfo.phone"
           ></u--input>
         </u-form-item>
-        <u-form-item label="邮箱" prop="email" class="u-border-bottom">
+        <u-form-item label="年龄" prop="email" class="u-border-bottom">
           <u--input
             placeholder="请输入内容"
             border="none"
-            v-model="userInfo.email"
+            v-model="userInfo.age"
           ></u--input>
+        </u-form-item>
+        <u-form-item label="性别" prop="sex" class="u-border-bottom">
+          <u-radio-group v-model="userInfo.sex" size="36rpx">
+            <u-radio shape="circle" label="男" :name="1" labelSize="32rpx"></u-radio>
+            <u-radio shape="circle" label="女" :name="2" labelSize="32rpx" style="margin-left: 36rpx;"></u-radio>
+          </u-radio-group>
         </u-form-item>
       </u--form>
     </view>
@@ -43,10 +45,11 @@
           <u-button icon="arrow-left" text="返回" plain @click="goBack()"></u-button>
         </u-col>
         <u-col span="6">
-		      <u-button icon="checkmark-circle" text="保存" type="primary"></u-button>
+		      <u-button icon="checkmark-circle" text="保存" type="primary" @click="updateInfo()"></u-button>
         </u-col>
       </u-row>
     </view>
+    <u-toast ref="uToast" />
   </view>
 </template>
 
@@ -59,22 +62,47 @@ export default {
   },
   data () {
     return {
-      userInfo: {
-        nickName: '若依',
-        sex: '1',
-        email: 'fastbuild@163.com',
-        phonenumber: '18888888888'
-      }
+      userInfo: {},
     }
   },
+  created() {
+    this.getInfo()
+  },
   methods: {
+    getInfo () {
+      this.$store.dispatch('Info').then(res => {
+        this.userInfo = res
+      })
+    },
+    updateInfo() {
+      this.$store.dispatch('UpdateInfo', this.userInfo).then(res => {
+        this.$refs.uToast.show({
+          message: '修改成功',
+          type: 'success',
+          complete: () => {
+            this.goBack()
+          }
+        })
+      })
+    },
+    uploadAvatar(event) {
+      this.$store.dispatch('UpdateAvatar', event.file.url).then(res => {
+        this.userInfo.avatarPath = event.file.url
+        this.$refs.uToast.show({
+          message: '修改成功',
+          type: 'success',
+          complete: () => {
+            this.goBack()
+          }
+        })
+      })
+    },
     goBack () {
-      uni.navigateBack({ delta: 1});
+      uni.navigateBack({ delta: 1})
     }
   }
 }
 </script>
 
 <style lang="sass" scoped>
-
 </style>

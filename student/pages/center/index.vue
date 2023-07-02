@@ -4,11 +4,11 @@
     <view class="profile-top">
       <view class="user-info">
         <view>
-          <view class="user-info--name">{{ user.nickName }}</view>
-          <text class="user-info--account">{{ user.email || user.phonenumber || user.userName }}</text>
+          <view class="user-info--name">{{ user.realName }}</view>
+          <text class="user-info--account">{{ user.userName || user.phone }}</text>
         </view>
         <view>
-          <u-avatar src="/static/img/avatar.png" size="120rpx"></u-avatar>
+          <u-avatar :src="user.avatarPath" size="120rpx"></u-avatar>
         </view>
       </view>
       <view style="padding: 40rpx 40rpx 0 40rpx;">
@@ -78,7 +78,7 @@ export default {
     getInfo () {
       const app = this
       app.$store.dispatch('Info').then(res => {
-        app.user = res.user
+        app.user = res.data
       })
     },
     navigateTo (url) {

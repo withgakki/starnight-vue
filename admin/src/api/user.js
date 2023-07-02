@@ -31,14 +31,13 @@ export function updateUserProfile(data) {
 }
 
 export function updateUserPwd(oldPassword, newPassword) {
-  const data = {
-    oldPassword,
-    newPassword
-  }
   return request({
     url: '/user/profile/updatePwd',
     method: 'put',
-    params: data
+    data: {
+      oldPassword,
+      newPassword
+    }
   })
 }
 

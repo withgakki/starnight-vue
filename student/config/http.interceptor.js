@@ -53,7 +53,7 @@ module.exports = (vm) => {
             }
           },
         })
-      } else if (custom.toast !== false) {
+      } else {
         uni.$u.toast(data.msg || '系统错误，请联系管理员')
       }
 

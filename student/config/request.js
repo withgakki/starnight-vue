@@ -1,4 +1,6 @@
 const http = uni.$u.http;
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import storage from '@/utils/storage';
 
 /**
  * 混入默认个性化配置
@@ -55,6 +57,31 @@ const request = {
   delete (url, params, config = {}) {
     config = mixinCustom(config)
     return http.delete(url, params, config);
+  },
+  
+  upload(url, name, params, config = {}) {
+    return new Promise((resolve, reject) => {
+      config = mixinCustom(config)
+      uni.uploadFile({
+        url: url,
+        name: name,
+        filePath: params,
+        header: {
+          'Authorization': 'Bearer ' + storage.get(ACCESS_TOKEN)
+        },
+        success: (res) => {
+          res.data = JSON.parse(res.data)  // json字符串转换
+          console.log(res.data)
+          if (res.data.code !== 200) {
+            uni.$u.toast(res.data.msg || '系统错误，请联系管理员')
+            reject(res)
+          }
+          setTimeout(() => {
+            resolve(res)
+          }, 1000)
+        },
+      })
+    })
   },
 
 };

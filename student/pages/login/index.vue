@@ -25,7 +25,6 @@
 	</view>
 </template>
 <script>
-import * as CaptchaApi from '@/api/captcha'
 import { isEmpty } from '@/utils/verify.js'
 
 export default {

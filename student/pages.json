@@ -22,48 +22,6 @@
 			}
 		},
 		{
-			"path": "pages/work/user/list",
-			"style": {
-				"navigationBarTitleText": "用户管理",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/work/user/edit",
-			"style": {
-				"navigationBarTitleText": "用户详情",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/work/notice/list",
-			"style": {
-				"navigationBarTitleText": "通知公告",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/work/notice/manage",
-			"style": {
-				"navigationBarTitleText": "公告管理",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/work/notice/detail",
-			"style": {
-				"navigationBarTitleText": "公告详情",
-				"navigationStyle": "custom"
-			}
-		},
-		{
-			"path": "pages/work/notice/edit",
-			"style": {
-				"navigationBarTitleText": "公告详情",
-				"navigationStyle": "custom"
-			}
-		},
-		{
 			"path": "pages/center/index",
 			"style": {
 				"navigationBarTitleText": "我的",
