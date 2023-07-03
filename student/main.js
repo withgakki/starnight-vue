@@ -2,6 +2,12 @@ import App from './App'
 import Vue from 'vue'
 import uView from 'uni_modules/uview-ui'
 
+// 挂载全局方法
+import { parseLevel, parseSex, parseQuestionType } from 'utils/starnight.js'
+Vue.prototype.parseLevel = parseLevel
+Vue.prototype.parseSex = parseSex
+Vue.prototype.parseQuestionType = parseQuestionType
+
 Vue.use(uView)
 
 Vue.config.productionTip = true

@@ -10,26 +10,14 @@
     </view>
     <view style="padding: 40rpx;">
       <u--form :model="userInfo" ref="uForm" labelWidth="160rpx" labelAlign="left">
-        <u-form-item label="真实姓名" prop="nickName" class="u-border-bottom">
-          <u--input
-            placeholder="请输入内容"
-            border="none"
-            v-model="userInfo.realName"
-          ></u--input>
+        <u-form-item label="真实姓名" prop="realName" class="u-border-bottom">
+          <u--input placeholder="请输入内容" border="none" v-model="userInfo.realName"></u--input>
         </u-form-item>
-        <u-form-item label="手机号码" prop="phonenumber" class="u-border-bottom">
-          <u--input
-            placeholder="请输入内容"
-            border="none"
-            v-model="userInfo.phone"
-          ></u--input>
+        <u-form-item label="手机号码" prop="phone" class="u-border-bottom">
+          <u--input placeholder="请输入内容" border="none" v-model="userInfo.phone"></u--input>
         </u-form-item>
-        <u-form-item label="年龄" prop="email" class="u-border-bottom">
-          <u--input
-            placeholder="请输入内容"
-            border="none"
-            v-model="userInfo.age"
-          ></u--input>
+        <u-form-item label="年龄" prop="age" class="u-border-bottom">
+          <u--input placeholder="请输入内容" border="none" v-model="userInfo.age"></u--input>
         </u-form-item>
         <u-form-item label="性别" prop="sex" class="u-border-bottom">
           <u-radio-group v-model="userInfo.sex" size="36rpx">
@@ -45,7 +33,7 @@
           <u-button icon="arrow-left" text="返回" plain @click="goBack()"></u-button>
         </u-col>
         <u-col span="6">
-		      <u-button icon="checkmark-circle" text="保存" type="primary" @click="updateInfo()"></u-button>
+          <u-button icon="checkmark-circle" text="保存" type="primary" @click="updateInfo()"></u-button>
         </u-col>
       </u-row>
     </view>
@@ -54,54 +42,103 @@
 </template>
 
 <script>
-import Navbar from '@/components/navbar/Navbar'
+  import Navbar from '@/components/navbar/Navbar'
 
-export default {
-  components: {
-    Navbar,
-  },
-  data () {
-    return {
-      userInfo: {},
-    }
-  },
-  created() {
-    this.getInfo()
-  },
-  methods: {
-    getInfo () {
-      this.$store.dispatch('Info').then(res => {
-        this.userInfo = res
-      })
+  export default {
+    components: {
+      Navbar,
     },
-    updateInfo() {
-      this.$store.dispatch('UpdateInfo', this.userInfo).then(res => {
-        this.$refs.uToast.show({
-          message: '修改成功',
-          type: 'success',
-          complete: () => {
-            this.goBack()
-          }
+    data() {
+      return {
+        userInfo: {},
+        uFormRules: {
+          realName: [
+            {
+              type: 'string',
+              required: true,
+              message: '请填写姓名',
+              trigger: ['blur', 'change']
+            },
+            {
+              min: 2,
+              max: 4,
+              message: '请输入正确的姓名',
+              trigger: ['blur', 'change']
+            },
+          ],
+          phone: [
+            {
+              required: true,
+              message: '请填写手机号',
+              trigger: ['blur', 'change']
+            },
+            {
+              validator: (rule, value, callback) => {
+                return uni.$u.test.mobile(value);
+              },
+              message: '手机号码不正确',
+              trigger: ['change', 'blur'],
+            },
+          ],
+          age: {
+            type: 'number',
+            required: true,
+            message: '请正确填写年龄',
+            trigger: ['blur', 'change']
+          },
+          sex: {
+            type: 'number',
+            enum: [1, 2],
+            required: true,
+            message: '请选择男或女',
+            trigger: ['blur', 'change']
+          },
+        },
+      }
+    },
+    created() {
+      this.getInfo()
+    }, 
+    methods: {
+      getInfo() {
+        this.$store.dispatch('Info').then(res => {
+          this.userInfo = res
+        }).then(() => {
+          this.$refs.uForm.setRules(this.uFormRules)
         })
-      })
-    },
-    uploadAvatar(event) {
-      this.$store.dispatch('UpdateAvatar', event.file.url).then(res => {
-        this.userInfo.avatarPath = event.file.url
-        this.$refs.uToast.show({
-          message: '修改成功',
-          type: 'success',
-          complete: () => {
-            this.goBack()
-          }
+      },
+      updateInfo() {
+        this.$refs.uForm.validate().then(res => {
+          this.$store.dispatch('UpdateInfo', this.userInfo).then(res => {
+            this.$refs.uToast.show({
+              message: '修改成功',
+              type: 'success',
+              complete: () => {
+                this.goBack()
+              }
+            })
+          })
         })
-      })
-    },
-    goBack () {
-      uni.navigateBack({ delta: 1})
+      },
+      uploadAvatar(event) {
+        this.$store.dispatch('UpdateAvatar', event.file.url).then(res => {
+          this.userInfo.avatarPath = event.file.url
+          this.$refs.uToast.show({
+            message: '修改成功',
+            type: 'success',
+            complete: () => {
+              this.goBack()
+            }
+          })
+        })
+      },
+      goBack() {
+        uni.navigateBack({
+          delta: 1
+        })
+      }
     }
   }
-}
 </script>
 
 <style lang="sass" scoped>
