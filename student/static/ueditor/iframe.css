@@ -1,0 +1,6 @@
+.gapfilling-span {
+  color: $u-main-color;
+  padding: 0 15px;
+  margin: 0 5px;
+  border-bottom: 1px solid #606266
+}

@@ -14,10 +14,24 @@
 				"navigationStyle": "custom"
 			}
 		},
+    {
+    	"path": "pages/exam/index",
+    	"style": {
+    		"navigationBarTitleText": "试卷",
+    		"navigationStyle": "custom"
+    	}
+    },
+    {
+    	"path": "pages/exam/do",
+    	"style": {
+    		"navigationBarTitleText": "考试",
+    		"navigationStyle": "custom"
+    	}
+    },
 		{
-			"path": "pages/work/index",
+			"path": "pages/record/index",
 			"style": {
-				"navigationBarTitleText": "工作台",
+				"navigationBarTitleText": "记录",
 				"navigationStyle": "custom"
 			}
 		},
@@ -53,11 +67,16 @@
 			"iconPath": "static/img/tabbar/home.png",
 			"selectedIconPath": "static/img/tabbar/home_art.png",
 			"text": "首页"
-		}, {
-			"pagePath": "pages/work/index",
+		},{
+			"pagePath": "pages/exam/index",
 			"iconPath": "static/img/tabbar/center.png",
 			"selectedIconPath": "static/img/tabbar/center_art.png",
-			"text": "工作台"
+			"text": "试卷"
+		}, {
+			"pagePath": "pages/record/index",
+			"iconPath": "static/img/tabbar/center.png",
+			"selectedIconPath": "static/img/tabbar/center_art.png",
+			"text": "记录"
 		}, {
 			"pagePath": "pages/center/index",
 			"iconPath": "static/img/tabbar/user.png",

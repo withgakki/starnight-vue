@@ -15,15 +15,15 @@
           <u-col span="8">{{ paperItem.examPaperName }}</u-col>
           <u-col v-if="paperItem.status === null" span="4" class="right-box">
             <u-tag text="未完成" plain size="mini" type="error"></u-tag>
-            <u-link href="" text="进入考试" fontSize="12"></u-link>
+            <u--text @click="goExamDo(paperItem.examPaperId)" type="primary" text="进入考试" size="12"></u--text>
           </u-col>
           <u-col v-else-if="paperItem.status === 1" span="4" class="right-box">
             <u-tag text="待批阅" plain size="mini" type="warning"></u-tag>
-            <u-link href="" text="查看答卷" fontSize="12"></u-link>
+            <u--text text="查看答卷" type="primary" size="12"></u--text>
           </u-col>
           <u-col v-else-if="paperItem.status === 2" span="4" class="right-box">
             <u-tag text="已完成" plain size="mini" type="success"></u-tag>
-            <u-link href="" text="查看答卷" fontSize="12"></u-link>
+            <u--text text="查看答卷" type="primary" size="12"></u--text>
           </u-col>
         </u-row>
       </u-collapse-item>
@@ -42,7 +42,7 @@
       <u--text type="info" :text="'考试时长：' + item.suggestTime"></u--text>
       <u--text type="info" :text="'开始时间：' + item.limitStartTime"></u--text>
       <u--text type="info" :text="'结束时间：' + item.limitEndTime"></u--text>
-      <u-link href="" text="开始答题"></u-link>
+      <u--text @click="goExamDo(item.id)" text="开始答题" type="primary" class="button-span"></u--text>
     </uni-card>
     <uni-card v-for="item in examList.fixedPaper" class="paper-card">
       <h3>{{ item.name }}</h3>
@@ -50,7 +50,7 @@
       <u--text type="info" :text="'题目数：' + item.questionCount"></u--text>
       <u--text type="info" :text="'试卷总分：' + item.score"></u--text>
       <u--text type="info" :text="'考试时长：' + item.suggestTime"></u--text>
-      <u-link href="" text="开始答题"></u-link>
+      <u--text @click="goExamDo(item.id)" text="开始答题" type="primary" class="button-span"></u--text>
     </uni-card>
 
   </view>
@@ -96,6 +96,11 @@
           console.log("exam", res.data)
           this.examList = res.data
         })
+      },
+      goExamDo(id) {
+        uni.navigateTo({
+          url: `/pages/exam/do?id=${id}`
+        })
       }
     },
   }
@@ -114,14 +119,8 @@
     height: 23px;
     display: flex;
     flex-direction: row;
-
-    /deep/ .u-link {
-      justify-content: center;
-      justify-items: center;
-    }
-
-    /deep/ span {
-      line-height: 23px;
+    /deep/ .u-tag-wrapper {
+      margin-right: 12px;
     }
   }
   
@@ -129,9 +128,9 @@
     h3 {
       margin-bottom: 6px;
     }
-    /deep/ .u-link {
-      float: right;
-      margin: 10px 0;
+    .button-span {
+      flex-direction: row-reverse;
+      margin: 7px 0;
     }
   }
 </style>
