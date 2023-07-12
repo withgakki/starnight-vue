@@ -28,6 +28,13 @@
     		"navigationStyle": "custom"
     	}
     },
+    {
+    	"path": "pages/exam/read",
+    	"style": {
+    		"navigationBarTitleText": "查看试卷",
+    		"navigationStyle": "custom"
+    	}
+    },
 		{
 			"path": "pages/record/index",
 			"style": {
