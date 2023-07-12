@@ -69,8 +69,8 @@
 			"text": "首页"
 		},{
 			"pagePath": "pages/exam/index",
-			"iconPath": "static/img/tabbar/center.png",
-			"selectedIconPath": "static/img/tabbar/center_art.png",
+			"iconPath": "static/img/tabbar/paper.png",
+			"selectedIconPath": "static/img/tabbar/paper_art.png",
 			"text": "试卷"
 		}, {
 			"pagePath": "pages/record/index",

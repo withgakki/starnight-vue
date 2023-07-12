@@ -17,7 +17,7 @@
     <u--form :model="examInfo" ref="uForm" class="paper-center">
       <u-row v-for="(item, index) in examInfo.titleItems" :key="index">
         <u-col>
-          <h3>{{ item.name }}</h3>
+          <h3>{{ (index + 1).toLocaleString('zh-hans-CN-u-nu-hanidec',{useGrouping:false}) }}. {{ item.name }}</h3>
           <u-form-item v-for="qItem in item.questionItems" :key="qItem.itemOrder" class="question-item">
             <question-edit :qType="qItem.questionType" :question="qItem"
               :answer="answerInfo.answerItems[qItem.itemOrder - 1]"></question-edit>
@@ -162,7 +162,7 @@
   }
 
   .paper-center {
-    width: 90%;
+    width: 95%;
     margin: 0 auto;
   }
 

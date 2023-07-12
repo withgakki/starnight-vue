@@ -36,7 +36,7 @@
       :iconStyle="{'color': '#3c9cff', 'font-size': '25px', 'padding-right': '15rpx'}"></u--text>
     <uni-card v-for="item in examList.timeLimitPaper" class="paper-card">
       <h3>{{ item.name }}</h3>
-      <u--text type="info" :text="'学科：' + item.subjectId"></u--text>
+      <u--text type="info" :text="'学科：' + parseSubject(item.subjectId)"></u--text>
       <u--text type="info" :text="'题目数：' + item.questionCount"></u--text>
       <u--text type="info" :text="'试卷总分：' + item.score"></u--text>
       <u--text type="info" :text="'考试时长：' + item.suggestTime"></u--text>
@@ -46,7 +46,7 @@
     </uni-card>
     <uni-card v-for="item in examList.fixedPaper" class="paper-card">
       <h3>{{ item.name }}</h3>
-      <u--text type="info" :text="'学科：' + item.subjectId"></u--text>
+      <u--text type="info" :text="'学科：' + parseSubject(item.subjectId)"></u--text>
       <u--text type="info" :text="'题目数：' + item.questionCount"></u--text>
       <u--text type="info" :text="'试卷总分：' + item.score"></u--text>
       <u--text type="info" :text="'考试时长：' + item.suggestTime"></u--text>
@@ -85,15 +85,14 @@
     },
     created() {
       this.getTaskList()
+      this.$store.dispatch('getSubjectList')
     },
     methods: {
       getTaskList() {
         getTaskListIndex().then(res => {
-          console.log("task", res.data)
           this.taskList = res.data
         })
         getExamListIndex().then(res => {
-          console.log("exam", res.data)
           this.examList = res.data
         })
       },

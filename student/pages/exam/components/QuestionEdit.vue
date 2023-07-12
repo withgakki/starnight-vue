@@ -44,7 +44,7 @@
       </u-form-item>
     </view>
     <view v-if="qType === 5" class="text-input">
-      <u--textarea v-model="answer.content" placeholder="请输入答案" height="120" :confirmType="null" count :maxlength="500"
+      <u--textarea v-model="answer.content" placeholder="请输入答案" height="120" :confirmType="null" :maxlength="500"
         spellcheck="false"></u--textarea>
     </view>
   </view>
@@ -94,6 +94,7 @@
 
 <style lang="scss">
   .title {
+    width: 90vw;
     display: flex;
     justify-content: flex-start;
 
@@ -109,6 +110,7 @@
   }
 
   .text-input {
+    width: 75vw;
     margin-top: 5px;
 
     /deep/ .u-form-item__body {
@@ -116,12 +118,10 @@
     }
 
     /deep/ .u-input {
-      width: 75vw;
       padding: 3px 9px !important;
     }
 
     /deep/ .u-textarea {
-      width: 75vw;
       padding: 3px 9px !important;
     }
 
@@ -129,6 +129,7 @@
 
   .select-input {
     margin-top: 5px;
+    width: 75vw;
 
     .uni-label-pointer {
       display: flex;
