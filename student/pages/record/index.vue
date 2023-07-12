@@ -2,7 +2,7 @@
   <view>
     <Navbar :hideBtn="true" title="考试记录" bgColor="#fff" h5Show :fixed="false"></Navbar>
     <view v-if="total > 0">
-      <u-list>
+      <u-list style="height: 100%;">
         <u-list-item v-for="(item, index) in answers" :key="index">
           <view class="paper-card">
             <p>{{ item.paperName }}</p>
@@ -76,7 +76,6 @@
           } else {
             this.status = "loadmore"
           }
-          console.log(this.answers)
         })
       },
       goPaperExamPage() {
@@ -96,9 +95,7 @@
 <style lang="scss">
 
   .paper-card {
-    // TODO 样式设计
-    width: 95%;
-    margin: 0 auto;
+    margin: 5px 3%;
     
     p {
       margin: 15px 0 5px 0;
