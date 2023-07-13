@@ -22,6 +22,9 @@
 			</view>
 			<button @tap="login()">登 录</button>
 		</form>
+    <view class="link-box">
+      <u--text @click="goRegisterPage()" type="primary" text="去注册" size="17"></u--text>
+    </view>
 	</view>
 </template>
 <script>
@@ -72,6 +75,11 @@ export default {
 				}).finally(() => app.isLoading = false)
 			}
 		},
+    goRegisterPage() {
+      uni.navigateTo({
+        url: '/pages/register/index',
+      })
+    },
 	}
 };
 </script>

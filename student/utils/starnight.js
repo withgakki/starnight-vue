@@ -1,7 +1,7 @@
 import store from "@/store"
 
 // 年级 Level 字典
-const levelEnum = [
+export const levelEnum = [
   { key: 1, value: '一年级' },
   { key: 2, value: '二年级' },
   { key: 3, value: '三年级' }, 
@@ -17,13 +17,13 @@ const levelEnum = [
 ];
 
 // 性别 Sex 字典
-const sexEnum = [
+export const sexEnum = [
   { key: 1, value: '男' }, 
   { key: 2, value: '女' },
 ];
 
 // 问题编辑页面 字典
-const questionTypeEnum = [
+export const questionTypeEnum = [
   { key: 1, value: "/question/edit/singleChoice", name: "单选题" },
   { key: 2, value: "/question/edit/multipleChoice", name: "多选题" },
   { key: 3, value: "/question/edit/trueFalse", name: "判断题" },
@@ -32,7 +32,7 @@ const questionTypeEnum = [
 ];
 
 // 试卷类型 字典
-const examPaperTypeEnum = [
+export const examPaperTypeEnum = [
   { key: 1, value: "固定试卷" },
   { key: 4, value: "时段试卷" },
   { key: 6, value: "任务试卷" },

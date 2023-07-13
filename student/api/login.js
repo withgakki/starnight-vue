@@ -5,3 +5,6 @@ export const login = (params) => request.post('/user/login', params, { custom: {
 
 // 用户退出
 export const logout = () => request.delete('/user/logout')
+
+// 注册
+export const register = (params) => request.post('/user/register/student', params)
