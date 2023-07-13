@@ -25,7 +25,7 @@
       </view>
     </view>
     <view style="padding: 40rpx; background-color: #fff;">
-      <u-grid>
+      <u-grid class="tools-grid">
         <u-grid-item @click="navigateTo('/pages/center/profile')">
           <u-icon name="account-fill" color="#2979ff" size="60rpx"></u-icon>
           <text class="btn-text">个人资料</text>
@@ -38,10 +38,14 @@
           <u-icon name="coupon-fill" color="#2979ff" size="60rpx"></u-icon>
           <text class="btn-text">操作日志</text>
         </u-grid-item>
+        <u-grid-item @click="navigateTo('/pages/question-error/index')">
+          <u-icon name="bookmark-fill" color="#2979ff" size="60rpx"></u-icon>
+          <text class="btn-text">错题本</text>
+        </u-grid-item>
       </u-grid>
     </view>
 
-    <view style="padding: 40rpx; margin-top: 300rpx;">
+    <view style="padding: 40rpx; margin-top: 200rpx;">
       <u-row gutter="32">
         <u-col span="6">
           <u-button icon="phone" text="联系我们" plain @click="resetContact = true"></u-button>
@@ -144,4 +148,11 @@
     }
 
   }
+  
+  .tools-grid {
+    .u-grid-item {
+      margin-bottom: 30px;
+    }
+  }
+  
 </style>

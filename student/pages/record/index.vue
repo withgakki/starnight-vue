@@ -22,7 +22,7 @@
           <gap height="4"></gap>
         </u-list-item>
       </u-list>
-      <u-loadmore :status="status" @loadmore="getExamRecord()" dashed line loading-text="努力加载中, 先写套试卷"
+      <u-loadmore :status="status" @loadmore="getNextRecord()" dashed line loading-text="努力加载中, 先写套试卷"
         loadmore-text="下拉加载更多" nomore-text="没有更多记录了" />
     </view>
     <u-empty v-else text="------ 没有更多考试记录 ------" textSize="16" icon="/static/img/data.png">
@@ -59,12 +59,7 @@
       this.$store.dispatch('getSubjectList')
     },
     onReachBottom() {
-      if (this.answers.length >= this.total) {
-        return
-      }
-      this.status = "loading"
-      this.queryParams.pageNum++
-      this.getExamRecord()
+      this.getNextRecord()
     },
     methods: {
       getExamRecord() {
@@ -77,6 +72,14 @@
             this.status = "loadmore"
           }
         })
+      },
+      getNextRecord() {
+        if (this.answers.length >= this.total) {
+          return
+        }
+        this.status = "loading"
+        this.queryParams.pageNum++
+        this.getExamRecord()
       },
       goPaperExamPage() {
         uni.switchTab({

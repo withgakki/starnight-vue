@@ -23,7 +23,7 @@
         <gap height="4"></gap>
       </u-list-item>
     </u-list>
-    <u-loadmore :status="status" @loadmore="getInfo()" dashed line loading-text="努力加载中" loadmore-text="下拉加载更多"
+    <u-loadmore :status="status" @loadmore="getNextInfo()" dashed line loading-text="努力加载中" loadmore-text="下拉加载更多"
       nomore-text="没有更多试卷了" />
   </view>
 </template>
@@ -71,12 +71,7 @@
       this.$store.dispatch('getSubjectList')
     },
     onReachBottom() {
-      if (this.examInfo.length >= this.total) {
-        return
-      }
-      this.status = "loading"
-      this.queryParams.pageNum++
-      this.getInfo()
+      this.getNextInfo()
     },
     methods: {
       getInfo() {
@@ -89,6 +84,14 @@
             this.status = "loadmore"
           }
         })
+      },
+      getNextInfo() {
+        if (this.examInfo.length >= this.total) {
+          return
+        }
+        this.status = "loading"
+        this.queryParams.pageNum++
+        this.getInfo()
       },
       changeTypeHandle(event) {
         this.queryParams.paperType = event.code

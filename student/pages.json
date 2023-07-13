@@ -62,7 +62,14 @@
 				"navigationBarTitleText": "操作日志",
 				"navigationStyle": "custom"
 			}
-		}
+		},
+    {
+    	"path": "pages/question-error/index",
+    	"style": {
+    		"navigationBarTitleText": "错题本",
+    		"navigationStyle": "custom"
+    	}
+    }
 	],
 	"tabBar": {
 		"color": "#909399",

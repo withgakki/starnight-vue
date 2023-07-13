@@ -19,11 +19,10 @@
           </u-col>
           <u-col v-else-if="paperItem.status === 1" span="4" class="right-box">
             <u-tag text="待批阅" plain size="mini" type="warning"></u-tag>
-            <u--text text="查看答卷" type="primary" size="12"></u--text>
           </u-col>
           <u-col v-else-if="paperItem.status === 2" span="4" class="right-box">
             <u-tag text="已完成" plain size="mini" type="success"></u-tag>
-            <u--text text="查看答卷" type="primary" size="12"></u--text>
+            <u--text @click="goExamRead(paperItem.examPaperAnswerId)" text="查看答卷" type="primary" size="12"></u--text>
           </u-col>
         </u-row>
       </u-collapse-item>
@@ -91,6 +90,7 @@
       getTaskList() {
         getTaskListIndex().then(res => {
           this.taskList = res.data
+          console.log(this.taskList)
         })
         getExamListIndex().then(res => {
           this.examList = res.data
@@ -99,6 +99,11 @@
       goExamDo(id) {
         uni.navigateTo({
           url: `/pages/exam/do?id=${id}`
+        })
+      },
+      goExamRead(id) {
+        uni.navigateTo({
+          url: `/pages/exam/read?id=${id}`
         })
       }
     },
