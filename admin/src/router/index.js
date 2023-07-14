@@ -112,7 +112,7 @@ export const constantRoutes = [
     ],
   },
 
-   // 试卷管理页
+  // 试卷管理页
   {
     path: "/exampaper",
     component: Layout,
@@ -131,7 +131,7 @@ export const constantRoutes = [
         name: "ExampaperEdit",
         component: () => import("@/views/exampaper/edit/index"),
         meta: { title: "试卷创编", icon: "tree" },
-      }
+      },
     ],
   },
 
@@ -150,35 +150,35 @@ export const constantRoutes = [
         meta: { title: "题目列表", icon: "table" },
       },
       {
-        path: "/question/edit/singleChoice",
+        path: "/question/edit/single-choice",
         name: "SingleChoice",
         component: () => import("@/views/question/edit/single-choice"),
         meta: { title: "单选题创编", icon: "tree" },
       },
       {
-        path: "/question/edit/multipleChoice",
+        path: "/question/edit/multiple-choice",
         name: "MultipleChoice",
         component: () => import("@/views/question/edit/multiple-choice"),
         meta: { title: "多选题创编", icon: "tree" },
       },
       {
-        path: "/question/edit/trueFalse",
+        path: "/question/edit/true-false",
         name: "TrueFalse",
         component: () => import("@/views/question/edit/true-false"),
         meta: { title: "判断题创编", icon: "tree" },
       },
       {
-        path: "/question/edit/gapFilling",
+        path: "/question/edit/gap-filling",
         name: "GapFilling",
         component: () => import("@/views/question/edit/gap-filling"),
         meta: { title: "填空题创编", icon: "tree" },
       },
       {
-        path: "/question/edit/shortAnswer",
+        path: "/question/edit/short-answer",
         name: "ShortAnswer",
         component: () => import("@/views/question/edit/short-answer"),
         meta: { title: "简答题创编", icon: "tree" },
-      }
+      },
     ],
   },
 
@@ -201,7 +201,30 @@ export const constantRoutes = [
         name: "TaskexamEdit",
         component: () => import("@/views/taskexam/edit/index"),
         meta: { title: "任务创编", icon: "tree" },
-      }
+      },
+    ],
+  },
+
+  // 答卷管理
+  {
+    path: "/answer",
+    component: Layout,
+    redirect: "/answer/judge-list",
+    name: "Answer",
+    meta: { title: "答卷管理", icon: "el-icon-s-help" },
+    children: [
+      {
+        path: "/answer/judge-list",
+        name: "JudgeList",
+        component: () => import("@/views/answer/judgeList"),
+        meta: { title: "批改列表", icon: "table" },
+      },
+      {
+        path: "/answer/completed-list",
+        name: "CompletedList",
+        component: () => import("@/views/answer/completedList"),
+        meta: { title: "完成列表", icon: "tree" },
+      },
     ],
   },
 
