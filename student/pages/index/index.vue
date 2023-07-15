@@ -90,7 +90,6 @@
       getTaskList() {
         getTaskListIndex().then(res => {
           this.taskList = res.data
-          console.log(this.taskList)
         })
         getExamListIndex().then(res => {
           this.examList = res.data

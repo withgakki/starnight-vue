@@ -1,15 +1,13 @@
 <template>
-  <view style="padding: 40rpx;">
-    <view>
-      <u-search placeholder="请输入查询内容" v-model="params.title" height="60rpx" @search="searchData" @custom="searchData"></u-search>
-    </view>
-    <view>
-      <u-list v-if="logList.length > 0" @scrolltolower="scrolltolower">
-        <u-list-item v-for="(item, index) in logList" :key="index" class="log-item">
-          <view><text style="color: #606266;">操作内容：</text><text>{{item.title}}</text></view>
-          <view><text style="color: #606266;">请求地址：</text><text>{{item.operUrl}}</text></view>
-          <view><text style="color: #606266;">操作地址：</text><text>{{item.operLocation}}</text></view>
-          <view><text style="color: #606266;">操作时间：</text><text>{{item.operTime}}</text></view>
+  <view>
+    <Navbar title="操作日志" bgColor="#fff" :h5Show="true" :fixed="false"></Navbar>
+    <view class="log-step">
+      <u-list v-if="logList.length > 0">
+        <u-list-item v-for="(item, index) in logList" :key="index">
+          <u-cell :title="item.content" :value="item.createTime"></u-cell>
+        </u-list-item>
+        <u-list-item class="tail">
+          <u-loadmore status="loadmore" loadmoreText="——— 仅显示当前账户最近10条操作记录 ———" />
         </u-list-item>
       </u-list>
       <u-empty v-else></u-empty>
@@ -18,55 +16,52 @@
 </template>
 
 <script>
-import * as LogApi from '@/api/center/log'
+  import Navbar from '@/components/navbar/Navbar'
+  import * as LogApi from '@/api/center/log'
 
-export default {
-  data () {
-    return {
-      params: {
-        pageNum: 0,
-        pageSize: 10,
-        title: ''
-      },
-      logList: []
-    }
-  },
-  created () {
-    this.loadData();
-  },
-  methods: {
-    // 加载日志列表数据
-    loadData () {
-      const app = this
-      // 首先获取当前登录账号信息
-      app.$store.dispatch('Info').then(res => {
-        app.params.pageNum += 1
-        if (res.user) {
-          // 只查询当前用户的操作日志
-          app.params.operName = res.user.userName
-        }
-        LogApi.operLog(app.params).then(res => {
-          app.logList = app.logList.concat(res.rows);
+  export default {
+    components: {
+      Navbar,
+    },
+    data() {
+      return {
+        logList: []
+      }
+    },
+    created() {
+      this.loadData();
+    },
+    methods: {
+      loadData() {
+        LogApi.listOperLog().then(res => {
+          this.logList = res.data
         })
-      })
-    },
-    // 查询按钮动作
-    searchData () {
-      this.params.pageNum = 0
-      this.logList = []
-      this.loadData();
-    },
-    // 滚动分页加载数据
-    scrolltolower () {
-      this.loadData();
+      },
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-.log-item {
-  padding: 20rpx 0;
-  border-bottom: 0.5px solid #ccc;
-}
+  .log-step {
+    margin-top: 20px;
+    
+    /deep/ .u-cell__body__content {
+      span {
+        font-size: 18px;
+      }
+    }
+    
+    /deep/ .u-cell__value {
+      span {
+        line-height: 13px;
+        font-size: 13px;
+        color: $u-info;
+      }
+    }
+    
+    .tail {
+      margin-top: 20px;
+    }
+    
+  }
 </style>

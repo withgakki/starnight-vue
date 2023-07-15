@@ -62,7 +62,6 @@
           const data = res.data
           this.examInfo = data.paper
           this.answerInfo = data.answer
-          console.log(data)
         })
       },
     }

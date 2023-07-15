@@ -58,8 +58,6 @@
           } else {
             this.status = "loadmore"
           }
-          console.log(this.total)
-          console.log(this.questionInfo)
         })
       },
       getNextInfo() {

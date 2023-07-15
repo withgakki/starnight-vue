@@ -51,6 +51,7 @@ export const actions = {
       LoginApi.logout(data, { custom: { catch: true } }).then(response => {
         storage.remove(ACCESS_TOKEN)
         commit('SET_TOKEN', '')
+        commit('SET_USER', null)
         resolve(response)
       }).catch(reject)
     })
@@ -59,6 +60,7 @@ export const actions = {
   // 用户信息
   Info({ commit, state }) {
     return new Promise((resolve, reject) => {
+      console.log(state.userInfo)
       if (state.userInfo) {
         return resolve(state.userInfo)
       }

@@ -205,7 +205,7 @@ export const constantRoutes = [
     ],
   },
 
-  // 答卷管理
+  // 答卷管理页
   {
     path: "/answer",
     component: Layout,
@@ -234,6 +234,21 @@ export const constantRoutes = [
         path: "/answer/judge",
         name: "Judge",
         component: () => import("@/views/answer/judge"),
+      },
+    ],
+  },
+
+  // 日志管理页
+  {
+    path: "/log",
+    component: Layout,
+    redirect: "/log/list",
+    children: [
+      {
+        path: "/log/list",
+        name: "Log",
+        component: () => import("@/views/log/index"),
+        meta: { title: "日志管理", icon: "tree" },
       },
     ],
   },

@@ -43,7 +43,7 @@
       </u-form-item>
     </view>
     <view v-if="qType === 5" class="text-input">
-      <u--textarea v-model="question.correct" height="120" :maxlength="500" spellcheck="false"></u--textarea>
+      <u--textarea v-model="question.correct" height="120" :maxlength="500" spellcheck="false" :confirmType="null"></u--textarea>
     </view>
     <view class="info-card">
       <view>
