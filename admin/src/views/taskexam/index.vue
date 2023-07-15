@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { listTaskexam } from "@/api/taskexam/index";
+import { listTaskexam, delTaskexam } from "@/api/taskexam/index";
 import LevelSelector from "@/components/LevelSelector";
 
 export default {

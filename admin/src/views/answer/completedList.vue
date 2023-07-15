@@ -155,8 +155,7 @@
       this.multiple = !selection.length
     },
     handleView(row) {
-      // TODO 打开查看页
-      console.log(row)
+      this.$tab.openPage('/answer/read', { id: row.id });
     },
     /** 删除按钮操作 */
     handleDelete(row) {

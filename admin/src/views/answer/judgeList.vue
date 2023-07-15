@@ -65,6 +65,12 @@
             icon="el-icon-edit"
             @click="handleJudge(scope.row)"
           >批改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+          >删除</el-button>
         </template>
       </el-table-column>
 
@@ -149,8 +155,7 @@
       this.multiple = !selection.length
     },
     handleJudge(row) {
-      // TODO 打开批改页
-      console.log(row)
+      this.$tab.openPage('/answer/judge', { id: row.id });
     },
     /** 删除按钮操作 */
     handleDelete(row) {

@@ -225,6 +225,16 @@ export const constantRoutes = [
         component: () => import("@/views/answer/completedList"),
         meta: { title: "完成列表", icon: "tree" },
       },
+      {
+        path: "/answer/read",
+        name: "Read",
+        component: () => import("@/views/answer/read"),
+      },
+      {
+        path: "/answer/judge",
+        name: "Judge",
+        component: () => import("@/views/answer/judge"),
+      },
     ],
   },
 

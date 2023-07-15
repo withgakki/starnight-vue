@@ -157,6 +157,7 @@ export default {
         _this.formLoading = false;
       });
     }
+    this.$store.dispatch('subject/getSubjectList');
   },
   methods: {
     addPaper() {
