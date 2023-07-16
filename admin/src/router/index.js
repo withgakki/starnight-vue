@@ -80,7 +80,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/user/admin",
     name: "User",
-    meta: { title: "用户管理", icon: "el-icon-s-help" },
+    meta: { title: "用户管理", icon: "el-icon-user-solid" },
     children: [
       {
         path: "/user/admin",
@@ -107,7 +107,7 @@ export const constantRoutes = [
         path: "/subject/list",
         name: "Subject",
         component: () => import("@/views/subject/index"),
-        meta: { title: "学科管理", icon: "tree" },
+        meta: { title: "学科管理", icon: "el-icon-menu" },
       },
     ],
   },
@@ -118,7 +118,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/exampaper/list",
     name: "Exampaper",
-    meta: { title: "试卷管理", icon: "el-icon-s-help" },
+    meta: { title: "试卷管理", icon: "el-icon-s-management" },
     children: [
       {
         path: "/exampaper/list",
@@ -141,7 +141,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/question/list",
     name: "User",
-    meta: { title: "题库管理", icon: "el-icon-s-help" },
+    meta: { title: "题库管理", icon: "el-icon-s-order" },
     children: [
       {
         path: "/question/list",
@@ -188,7 +188,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/taskexam/list",
     name: "Taskexam",
-    meta: { title: "任务管理", icon: "el-icon-s-help" },
+    meta: { title: "任务管理", icon: "el-icon-s-promotion" },
     children: [
       {
         path: "/taskexam/list",
@@ -211,7 +211,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: "/answer/judge-list",
     name: "Answer",
-    meta: { title: "答卷管理", icon: "el-icon-s-help" },
+    meta: { title: "答卷管理", icon: "el-icon-s-ticket" },
     children: [
       {
         path: "/answer/judge-list",
@@ -248,7 +248,7 @@ export const constantRoutes = [
         path: "/log/list",
         name: "Log",
         component: () => import("@/views/log/index"),
-        meta: { title: "日志管理", icon: "tree" },
+        meta: { title: "日志管理", icon: "el-icon-s-help" },
       },
     ],
   },

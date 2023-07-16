@@ -17,6 +17,9 @@ import plugins from './plugins' // plugins
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import * as echarts from 'echarts'  // echarts
+import CountTo from 'vue-count-to'  // vue-count-to
+
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, parseLevel, parseSex, parseSubject, parseQuestionType, parseEditUrl } from "@/utils/starnight"
 
 // 分页组件
@@ -27,8 +30,10 @@ import RightToolbar from "@/components/RightToolbar"
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
+Vue.component('count-to', CountTo)
 
 // 全局方法挂载
+Vue.prototype.$echarts = echarts
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
 Vue.prototype.addDateRange = addDateRange
