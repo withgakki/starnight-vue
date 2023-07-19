@@ -56,7 +56,7 @@
       </view>
       <view>
         <span class="label">解析： </span>
-        {{ question.analyze }}
+        <span v-html="question.analyze"></span>
       </view>
       <view>
         <span class="label">错误次数：</span>

@@ -1,12 +1,15 @@
 <template>
   <view>
     <Navbar title="错题本" bgColor="#fff" :h5Show="true" :fixed="false"></Navbar>
+    <u-alert closable type="primary" description="长按错题可以查看智能解析!"></u-alert>
     <view v-if="total > 0">
       <u--form>
         <u-list style="height: 100%;">
-          <u-list-item v-for="(item, index) in questionInfo" :key="index" class="list-item">
+          <u-list-item v-for="(item, index) in questionInfo" :key="index"
+            @longpress.native="getGptAnalyze(item.questionId)" class="list-item">
             <question-show :q-type="item.questionType" :question="item.question" :error-count="item.errorCount"
               :subject-name="item.subjectName"></question-show>
+            <view>111</view>
           </u-list-item>
         </u-list>
       </u--form>
@@ -16,6 +19,13 @@
     <u-empty v-else text="------ 没有更多错题记录 ------" textSize="16" icon="/static/img/data.png">
       <u-button @click="goPaperExamPage()" type="primary" text="点我去写试卷" style="margin-top: 20px;"></u-button>
     </u-empty>
+
+    <!-- 智能解析弹出框 -->
+    <u-modal :show="analyzeOpen" title="智能解析" content='content' @confirm="analyzeOpen = false"
+      @close="analyzeOpen = false" closeOnClickOverlay confirmText="我明白了!" negativeTop="120">
+      <view v-html="analyzeContent"></view>
+    </u-modal>
+
   </view>
 </template>
 
@@ -23,6 +33,7 @@
   import Navbar from '@/components/navbar/Navbar'
   import QuestionShow from './components/QuestionShow'
   import {
+    gptGptQuestionAnalyze,
     listQuestionError
   } from '../../api/question'
 
@@ -40,6 +51,8 @@
         },
         questionInfo: [],
         total: 0,
+        analyzeOpen: false,
+        analyzeContent: null,
       }
     },
     created() {
@@ -67,6 +80,12 @@
         this.status = "loading"
         this.queryParams.pageNum++
         this.getInfo()
+      },
+      getGptAnalyze(id) {
+        gptGptQuestionAnalyze(id).then(res => {
+          this.analyzeContent = res.msg
+          this.analyzeOpen = true
+        })
       },
       goPaperExamPage() {
         uni.switchTab({
