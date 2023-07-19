@@ -1,8 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="学科" prop="subjectId">
-        <subject-selector :data.sync="queryParams.subjectId" :level="queryParams.gradeLevel" init-all></subject-selector>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="120px">
+      <el-form-item label="发送者用户名" prop="sendUserName">
+        <el-input v-model="queryParams.sendUserName" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+      <el-form-item label="发送者真实姓名" prop="sendRealName">
+        <el-input v-model="queryParams.sendRealName" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -24,32 +27,16 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="answerPaperList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="messageList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="Id" align="center" prop="id" />
-      <el-table-column label="试卷名称" align="center" prop="paperName" />
-      <el-table-column label="用户名称" align="center" prop="userName" />
-      <el-table-column label="得分" align="center" prop="userScore">
+      <el-table-column label="标题" align="center" prop="title" show-overflow-tooltip />
+      <el-table-column label="内容" align="center" prop="content" show-overflow-tooltip />
+      <el-table-column label="发送人" align="center" prop="sendUserName" />
+      <el-table-column label="接收人" align="center" prop="receives" show-overflow-tooltip />
+      <el-table-column label="已读/接收数" align="center" prop="count">
         <template slot-scope="scope">
-          <span>
-            <span>{{ scope.row.userScore }}</span>
-            /
-            <span>{{ scope.row.paperScore }}</span>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="题目对错" align="center" prop="questionCorrect">
-        <template slot-scope="scope">
-          <span>
-            <span>{{ scope.row.questionCorrect }}</span>
-            /
-            <span>{{ scope.row.questionCount }}</span>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="耗时" align="center" prop="doTime">
-        <template slot-scope="scope">
-          <span>{{ scope.row.doTime }}秒</span>
+          <span>{{ scope.row.readCount }} / {{ scope.row.receiveUserCount }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime">
@@ -62,18 +49,11 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
-            @click="handleView(scope.row)"
-          >查看</el-button>
-          <el-button
-            size="mini"
-            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
           >删除</el-button>
         </template>
       </el-table-column>
-
     </el-table>
     
     <pagination
@@ -88,18 +68,10 @@
 </template>
 
 <script>
-  import {listAnswerPaper, delAnswerPaper} from "@/api/answer";
-  import LevelSelector from "@/components/LevelSelector";
-  import SubjectSelector from "@/components/SubjectSelector";
-  import ExampaperTypeSelector from "@/components/ExampaperTypeSelector";
+  import { listMessage, delMessage } from "@/api/message";
 
   export default {
-  name: "Exampaper",
-  components: {
-    LevelSelector,
-    SubjectSelector,
-    ExampaperTypeSelector
-  },
+  name: "MessageList",
   data() {
     return {
       // 遮罩层
@@ -114,14 +86,14 @@
       showSearch: true,
       // 总条数
       total: 0,
-      // 答卷表格数据
-      answerPaperList: [],
+      // 消息表格数据
+      messageList: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        status: 2,  // 已完成
-        subjectId: null,
+        sendUserName: null,
+        sendRealName: null,
       }
     };
   },
@@ -129,13 +101,14 @@
     this.getList();
   },
   methods: {
-    /** 查询答卷列表 */
+    /** 查询试卷列表 */
     getList() {
       this.loading = true;
-      listAnswerPaper(this.queryParams).then(response => {
-        this.answerPaperList = response.rows;
+      listMessage(this.queryParams).then(response => {
+        this.messageList = response.rows;
         this.total = response.total;
         this.loading = false;
+        console.log(this.messageList)
       });
     },
     /** 搜索按钮操作 */
@@ -154,14 +127,11 @@
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    handleView(row) {
-      this.$tab.openPage('/answer/read', { id: row.id });
-    },
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除答卷编号为"' + ids + '"的数据项？').then(function() {
-        return delAnswerPaper(ids);
+      this.$modal.confirm('是否确认删除消息编号为"' + ids + '"的数据项？').then(function() {
+        return delMessage(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

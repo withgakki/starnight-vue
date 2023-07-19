@@ -42,6 +42,13 @@
           <u-icon name="bookmark-fill" color="#2979ff" size="60rpx"></u-icon>
           <text class="btn-text">错题本</text>
         </u-grid-item>
+        <u-grid-item @click="navigateTo('/pages/message/index')">
+          <u-icon name="email-fill" color="#2979ff" size="60rpx"></u-icon>
+          <text class="btn-text">个人消息</text>
+          <view class="badge">
+            <u-badge :value="unReadMessageCount" type="error" max="99" absolute :offset="[-50, -20]"></u-badge>
+          </view>
+        </u-grid-item>
       </u-grid>
     </view>
 
@@ -69,6 +76,7 @@
 <script>
   import Navbar from '@/components/navbar/Navbar'
   import Password from './password.vue'
+  import { getUnReadCount } from '@/api/message/index'
 
   export default {
     components: {
@@ -80,16 +88,23 @@
         user: {},
         resetPassword: false,
         resetContact: false,
+        unReadMessageCount: 0,
       }
     },
     created() {
       this.getInfo()
+      this.getMessageInfo()
     },
     methods: {
       getInfo() {
         const app = this
         app.$store.dispatch('Info').then(res => {
           app.user = res.data
+        })
+      },
+      getMessageInfo() {
+        getUnReadCount().then(res => {
+          this.unReadMessageCount = res.data
         })
       },
       navigateTo(url) {
@@ -153,6 +168,10 @@
     .u-grid-item {
       margin-bottom: 30px;
     }
+  }
+  
+  .badge {
+    position: relative;
   }
   
 </style>

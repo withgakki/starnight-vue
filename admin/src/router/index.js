@@ -74,6 +74,36 @@ export const constantRoutes = [
     ],
   },
 
+  // 学科管理页
+  {
+    path: "/subject",
+    component: Layout,
+    redirect: "/subject/list",
+    children: [
+      {
+        path: "/subject/list",
+        name: "Subject",
+        component: () => import("@/views/subject/index"),
+        meta: { title: "学科管理", icon: "el-icon-menu" },
+      },
+    ],
+  },
+
+  // 日志管理页
+  {
+    path: "/log",
+    component: Layout,
+    redirect: "/log/list",
+    children: [
+      {
+        path: "/log/list",
+        name: "Log",
+        component: () => import("@/views/log/index"),
+        meta: { title: "日志管理", icon: "el-icon-s-help" },
+      },
+    ],
+  },
+
   // 用户管理页
   {
     path: "/user",
@@ -93,21 +123,6 @@ export const constantRoutes = [
         name: "Student",
         component: () => import("@/views/user/student/index"),
         meta: { title: "学生列表", icon: "tree" },
-      },
-    ],
-  },
-
-  // 学科管理页
-  {
-    path: "/subject",
-    component: Layout,
-    redirect: "/subject/list",
-    children: [
-      {
-        path: "/subject/list",
-        name: "Subject",
-        component: () => import("@/views/subject/index"),
-        meta: { title: "学科管理", icon: "el-icon-menu" },
       },
     ],
   },
@@ -238,18 +253,27 @@ export const constantRoutes = [
     ],
   },
 
-  // 日志管理页
+  
+  // 消息管理页
   {
-    path: "/log",
+    path: "/message",
     component: Layout,
-    redirect: "/log/list",
+    redirect: "/message/list",
+    name: "Answer",
+    meta: { title: "消息管理", icon: "el-icon-s-comment" },
     children: [
       {
-        path: "/log/list",
-        name: "Log",
-        component: () => import("@/views/log/index"),
-        meta: { title: "日志管理", icon: "el-icon-s-help" },
+        path: "/message/list",
+        name: "MessageList",
+        component: () => import("@/views/message/index"),
+        meta: { title: "消息列表", icon: "table" },
       },
+      {
+        path: "/message/edit",
+        name: "MessageEdit",
+        component: () => import("@/views/message/edit"),
+        meta: { title: "消息发送", icon: "el-icon-message-solid" },
+      }
     ],
   },
 

@@ -60,7 +60,6 @@ export const actions = {
   // 用户信息
   Info({ commit, state }) {
     return new Promise((resolve, reject) => {
-      console.log(state.userInfo)
       if (state.userInfo) {
         return resolve(state.userInfo)
       }

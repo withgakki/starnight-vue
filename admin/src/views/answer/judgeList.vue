@@ -24,7 +24,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="exampaperList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="answerPaperList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="Id" align="center" prop="id" />
       <el-table-column label="试卷名称" align="center" prop="paperName" />
@@ -121,8 +121,8 @@
       showSearch: true,
       // 总条数
       total: 0,
-      // 试卷表格数据
-      exampaperList: [],
+      // 答卷表格数据
+      answerPaperList: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -138,11 +138,11 @@
     this.getList();
   },
   methods: {
-    /** 查询试卷列表 */
+    /** 查询答卷列表 */
     getList() {
       this.loading = true;
       listAnswerPaper(this.queryParams).then(response => {
-        this.exampaperList = response.rows;
+        this.answerPaperList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -173,7 +173,7 @@
         this.getList();
         this.$notify({
           title: '智能批改成功',
-          message: `试卷编号为 ${row.id} 的最终分数为 ${res.msg} 分`,
+          message: `答卷编号为 ${row.id} 的最终分数为 ${res.msg} 分`,
           type: 'success'
         });
       })
@@ -181,7 +181,7 @@
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除试卷编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除答卷编号为"' + ids + '"的数据项？').then(function() {
         return delAnswerPaper(ids);
       }).then(() => {
         this.getList();

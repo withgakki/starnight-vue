@@ -76,6 +76,13 @@
     		"navigationBarTitleText": "错题本",
     		"navigationStyle": "custom"
     	}
+    },
+    {
+    	"path": "pages/message/index",
+    	"style": {
+    		"navigationBarTitleText": "我的消息",
+    		"navigationStyle": "custom"
+    	}
     }
 	],
 	"tabBar": {

@@ -35,7 +35,7 @@
       <el-table-column label="Id" align="center" prop="id" />
       <el-table-column label="用户名" align="center" prop="userName" />
       <el-table-column label="真实姓名" align="center" prop="realName" />
-      <el-table-column label="动态" align="center" prop="content" />
+      <el-table-column label="动态" align="center" prop="content" show-overflow-tooltip />
       <el-table-column label="创建时间" align="center" prop="createTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>

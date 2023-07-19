@@ -9,7 +9,6 @@
             @longpress.native="getGptAnalyze(item.questionId)" class="list-item">
             <question-show :q-type="item.questionType" :question="item.question" :error-count="item.errorCount"
               :subject-name="item.subjectName"></question-show>
-            <view>111</view>
           </u-list-item>
         </u-list>
       </u--form>

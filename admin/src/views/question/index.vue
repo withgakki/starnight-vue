@@ -231,7 +231,7 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.$tab.openPage("/question/edit/singleChoice");
+      this.$tab.openPage("/question/edit/single-choice");
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
