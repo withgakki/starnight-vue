@@ -64,7 +64,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleJudge(scope.row)"
-          >批改</el-button>
+          >人工批改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            :loading="judgeAutoLoading[scope.$index]"
+            @click="handleJudgeAuto(scope.row, scope.$index)"
+          >智能批改</el-button>
           <el-button
             size="mini"
             type="text"
@@ -88,7 +95,7 @@
 </template>
 
 <script>
-  import {listAnswerPaper, delAnswerPaper} from "@/api/answer";
+  import {listAnswerPaper, delAnswerPaper, judgeAnswerPaperAuto} from "@/api/answer";
   import LevelSelector from "@/components/LevelSelector";
   import SubjectSelector from "@/components/SubjectSelector";
   import ExampaperTypeSelector from "@/components/ExampaperTypeSelector";
@@ -122,7 +129,9 @@
         pageSize: 10,
         status: 1,  // 待批改
         subjectId: null,
-      }
+      },
+      // 智能批改加载按钮
+      judgeAutoLoading: [],
     };
   },
   created() {
@@ -156,6 +165,18 @@
     },
     handleJudge(row) {
       this.$tab.openPage('/answer/judge', { id: row.id });
+    },
+    handleJudgeAuto(row, index) {
+      this.$set(this.judgeAutoLoading, index, true)
+      judgeAnswerPaperAuto(row.id).then(res => {
+        this.$set(this.judgeAutoLoading, index, false)
+        this.getList();
+        this.$notify({
+          title: '智能批改成功',
+          message: `试卷编号为 ${row.id} 的最终分数为 ${res.msg} 分`,
+          type: 'success'
+        });
+      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {

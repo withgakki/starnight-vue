@@ -284,11 +284,11 @@ const sexEnum = [
 
 // 问题编辑页面 字典
 const questionTypeEnum = [
-  { key: 1, value: "/question/edit/singleChoice", name: "单选题" },
-  { key: 2, value: "/question/edit/multipleChoice", name: "多选题" },
-  { key: 3, value: "/question/edit/trueFalse", name: "判断题" },
-  { key: 4, value: "/question/edit/gapFilling", name: "填空题" },
-  { key: 5, value: "/question/edit/shortAnswer", name: "简答题" }
+  { key: 1, value: "/question/edit/single-choice", name: "单选题" },
+  { key: 2, value: "/question/edit/multiple-choice", name: "多选题" },
+  { key: 3, value: "/question/edit/true-false", name: "判断题" },
+  { key: 4, value: "/question/edit/gap-filling", name: "填空题" },
+  { key: 5, value: "/question/edit/short-answer", name: "简答题" }
 ];
 
 export function parseLevel(levelId) {

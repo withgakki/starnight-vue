@@ -17,12 +17,20 @@ export function getAnswerPaper(id) {
   })
 }
 
-// 批改答卷
+// 人工批改答卷
 export function judgeAnswerPaper(data) {
   return request({
     url: '/admin/exampaperanswer/judge',
     method: 'put',
     data: data
+  })
+}
+
+// 智能批改答卷
+export function judgeAnswerPaperAuto(id) {
+  return request({
+    url: '/admin/exampaperanswer/judge/' + id,
+    method: 'put',
   })
 }
 

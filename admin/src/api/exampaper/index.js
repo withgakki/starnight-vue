@@ -9,6 +9,7 @@ export function listExampaper(query) {
   })
 }
 
+// 查询任务试卷列表
 export function listByTaskExamPaper(query) {
   return request({
     url: '/admin/exampaper/list/taskexampaper',
@@ -29,6 +30,15 @@ export function getExampaper(id) {
 export function addExampaper(data) {
   return request({
     url: '/admin/exampaper',
+    method: 'post',
+    data: data
+  })
+}
+
+// 随机新增试卷
+export function addRandomExampaper(data) {
+  return request({
+    url: '/admin/exampaper/random',
     method: 'post',
     data: data
   })
