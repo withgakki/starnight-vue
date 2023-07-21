@@ -78,6 +78,13 @@
     	}
     },
     {
+    	"path": "pages/exam/query",
+    	"style": {
+    		"navigationBarTitleText": "试卷搜索",
+    		"navigationStyle": "custom"
+    	}
+    },
+    {
     	"path": "pages/message/index",
     	"style": {
     		"navigationBarTitleText": "我的消息",

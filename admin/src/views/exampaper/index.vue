@@ -296,8 +296,9 @@ export default {
           addRandomExampaper(this.form).then(res => {
             this.$modal.msgSuccess("新增成功");
             this.open = false;
-            this.formLoading = false;
             this.getList();
+          }).finally(() => {
+            this.formLoading = false;
           });
         }
       });

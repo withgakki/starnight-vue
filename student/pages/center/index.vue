@@ -42,6 +42,10 @@
           <u-icon name="bookmark-fill" color="#2979ff" size="60rpx"></u-icon>
           <text class="btn-text">错题本</text>
         </u-grid-item>
+        <u-grid-item @click="navigateTo('/pages/exam/query')">
+          <u-icon name="search" color="#2979ff" size="60rpx"></u-icon>
+          <text class="btn-text">试卷搜索</text>
+        </u-grid-item>
         <u-grid-item @click="navigateTo('/pages/message/index')">
           <u-icon name="email-fill" color="#2979ff" size="60rpx"></u-icon>
           <text class="btn-text">个人消息</text>

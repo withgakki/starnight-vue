@@ -43,9 +43,19 @@ export function delUser(id) {
   })
 }
 
+// 修改用户状态
 export function updateUserStatus(id) {
   return request({
     url: '/admin/user/status/' + id,
     method: 'put',
+  })
+}
+
+// 搜索用户
+export function searchUser(keyword) {
+  return request({
+    url: '/admin/user/search',
+    method: 'get',
+    params: { keyword }
   })
 }

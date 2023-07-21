@@ -14,22 +14,23 @@
         <el-input type="textarea" rows="13" v-model="form.content"></el-input>
       </el-form-item>
       <el-form-item label="接收人：" required>
-        <!-- <el-select
+        <el-select
           v-model="form.receiveUserIds"
           multiple
           filterable
           remote
           reserve-keyword
           placeholder="请输入用户名"
+          :remote-method="getUserByUserName"
           :loading="selectLoading"
         >
           <el-option
             v-for="item in options"
-            :key="item.value"
-            :label="item.name"
-            :value="item.value"
+            :key="item.id"
+            :label="item.realName || item.userName"
+            :value="item.id"
           />
-        </el-select> -->
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm">发送</el-button>
@@ -41,6 +42,7 @@
 
 <script>
 import { sendMessage } from "@/api/message";
+import { searchUser } from "@/api/user/index";
 
 export default {
   data() {
@@ -48,7 +50,7 @@ export default {
       form: {
         title: "",
         content: "",
-        receiveUserIds: [1],  // TODO 等待对接 elastic search
+        receiveUserIds: [],
       },
       formLoading: false,
       selectLoading: false,
@@ -66,8 +68,9 @@ export default {
       let _this = this;
       if (query !== "") {
         _this.selectLoading = true;
-
-
+        searchUser(query).then(res => {
+          _this.options = res.data;
+        }).finally(() => _this.selectLoading = false)
       } else {
         _this.options = [];
       }
