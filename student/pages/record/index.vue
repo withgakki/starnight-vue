@@ -54,7 +54,7 @@
         status: 'loadmore',
       }
     },
-    created() {
+    onShow() {
       this.getExamRecord()
       this.$store.dispatch('getSubjectList')
     },
