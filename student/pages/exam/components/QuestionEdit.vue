@@ -46,17 +46,20 @@
     <view v-if="qType === 5" class="text-input">
       <u--textarea v-model="answer.content" placeholder="请输入答案" height="120" :confirmType="null" :maxlength="500"
         spellcheck="false"></u--textarea>
+        <upload :url.sync="answer.contentImage"></upload>
     </view>
   </view>
 </template>
 
 <script>
   import Gap from '@/components/gap/Gap'
+  import Upload from '@/components/upload/Upload'
 
   export default {
     name: 'QuestionEdit',
     components: {
       Gap,
+      Upload,
     },
     props: {
       qType: {
@@ -73,6 +76,7 @@
           return {
             id: null,
             content: '',
+            contentImage: '',
             contentArray: [],
             completed: false,
           }
@@ -87,7 +91,7 @@
       selectMtHandler(event) {
         this.answer.completed = true
         this.answer.contentArray = event.detail.value
-      }
+      },
     }
   }
 </script>

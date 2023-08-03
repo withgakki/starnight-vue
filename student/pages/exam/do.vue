@@ -89,6 +89,7 @@
             this.answerInfo.answerItems.push({
               questionId: question.id,
               content: null,
+              contentImage: null,
               contentArray: [],
               completed: false,
               itemOrder: question.itemOrder
