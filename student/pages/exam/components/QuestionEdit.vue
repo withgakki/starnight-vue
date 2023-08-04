@@ -44,9 +44,9 @@
       </u-form-item>
     </view>
     <view v-if="qType === 5" class="text-input">
-      <u--textarea v-model="answer.content" placeholder="请输入答案" height="120" :confirmType="null" :maxlength="500"
+      <u--textarea v-show="answer.contentImage == '' || answer.contentImage == null" v-model="answer.content" placeholder="请输入答案" height="120" :confirmType="null" :maxlength="500"
         spellcheck="false"></u--textarea>
-        <upload :url.sync="answer.contentImage"></upload>
+        <upload v-show="answer.content == '' || answer.content == null" :url.sync="answer.contentImage"></upload>
     </view>
   </view>
 </template>

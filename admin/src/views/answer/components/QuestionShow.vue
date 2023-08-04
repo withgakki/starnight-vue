@@ -54,11 +54,19 @@
         <div v-if="qType === 5" class="text-style">
           <el-form-item>
             <el-input
+              v-if="answer.contentImage === '' || answer.contentImage === null"
               :value="answer.content"
               readonly
               type="textarea"
               :rows="10"
             ></el-input>
+            <el-image
+              v-else
+              style="width: 500px; height: 100px"
+              :src="answer.contentImage"
+              :preview-src-list="[answer.contentImage]"
+            >
+            </el-image>
           </el-form-item>
         </div>
       </div>

@@ -44,7 +44,8 @@
       </u-form-item>
     </view>
     <view v-if="qType === 5" class="text-input">
-      <u--textarea v-model="answer.content" height="120" :maxlength="500" spellcheck="false"></u--textarea>
+      <u--textarea v-if="answer.contentImage == null" v-model="answer.content" height="120" :maxlength="500" spellcheck="false"></u--textarea>
+      <u--image v-else :showLoading="true" :src="answer.contentImage" width="100%" height="80px"></u--image>
     </view>
     <view class="info-card">
       <view>
