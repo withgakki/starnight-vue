@@ -159,7 +159,7 @@ import { listQuestion, delQuestion } from "@/api/question/index";
 import LevelSelector from "@/components/LevelSelector";
 import SubjectSelector from "@/components/SubjectSelector";
 import QuestionTypeSelector from "@/components/QuestionTypeSelector";
-import Inspect from "./components/Inspect";
+import Inspect from "./components/inspect.vue";
 
 export default {
   name: "Question",

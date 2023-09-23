@@ -21,9 +21,6 @@
               个人中心
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/traceJP/StarNight">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
